@@ -15,6 +15,14 @@ const CbzExtractor = () => {
   const [completed, setCompleted] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const dropRef = useRef<HTMLDivElement | null>(null);
+  const [extractedFiles, setExtractedFiles] = useState<
+    Array<{
+      name: string;
+      data: Blob;
+      compressed: Blob;
+    }>
+  >([]);
+  const [compressMode, setCompressMode] = useState(true);
 
   useEffect(() => {
     if (fileInputRef.current) {
@@ -42,14 +50,40 @@ const CbzExtractor = () => {
 
       await Promise.all(extractPromises);
       const extractedZip = await extractFolder.generateAsync({ type: "blob" });
+      const extractedData = await extractFolder.generateAsync({ type: "blob" });
 
-      saveAs(extractedZip, `${file.name.replace(".cbz", "")}_extracted.zip`);
+      setExtractedFiles((prev) => [
+        ...prev,
+        {
+          name: file.name.replace(".cbz", ""),
+          data: extractedData,
+          compressed: extractedZip,
+        },
+      ]);
 
-      // Update progress
       setProgress(Math.round(((index + 1) / totalFiles) * 100));
     } catch (error) {
       console.error(`Gagal mengekstrak ${file.name}:`, error);
     }
+  };
+
+  const handleDownloadSingle = (index: number) => {
+    const file = extractedFiles[index];
+    if (compressMode) {
+      saveAs(file.compressed, `${file.name}_extracted.zip`);
+    } else {
+      saveAs(file.data, `${file.name}_extracted`);
+    }
+  };
+
+  const handleDownloadAll = () => {
+    extractedFiles.forEach((file) => {
+      if (compressMode) {
+        saveAs(file.compressed, `${file.name}_extracted.zip`);
+      } else {
+        saveAs(file.data, `${file.name}_extracted`);
+      }
+    });
   };
 
   const handleFileUpload = async (
@@ -131,6 +165,17 @@ const CbzExtractor = () => {
           </p>
         </div>
 
+        {/* Opsi Kompresi */}
+        <div className="mt-4 flex items-center gap-2">
+          <input
+            type="checkbox"
+            id="compressMode"
+            checked={compressMode}
+            onChange={(e) => setCompressMode(e.target.checked)}
+          />
+          <label htmlFor="compressMode">Download sebagai file ZIP</label>
+        </div>
+
         {/* Progress Bar */}
         {extracting && (
           <div className="mt-4">
@@ -148,6 +193,32 @@ const CbzExtractor = () => {
                 <li key={index}>{file}</li>
               ))}
             </ul>
+          </div>
+        )}
+
+        {/* Daftar File yang Sudah Diekstrak */}
+        {extractedFiles.length > 0 && (
+          <div className="mt-4">
+            <p className="font-semibold">File yang sudah diekstrak:</p>
+            <ul className="list-disc pl-4 text-sm text-gray-600">
+              {extractedFiles.map((file, index) => (
+                <li key={index} className="flex items-center justify-between">
+                  <span>{file.name}</span>
+                  <Button
+                    size="sm"
+                    onClick={() => handleDownloadSingle(index)}
+                    className="ml-2"
+                  >
+                    Download
+                  </Button>
+                </li>
+              ))}
+            </ul>
+            {extractedFiles.length > 1 && (
+              <Button className="mt-4 w-full" onClick={handleDownloadAll}>
+                Download Semua
+              </Button>
+            )}
           </div>
         )}
 
