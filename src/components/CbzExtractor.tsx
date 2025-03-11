@@ -88,7 +88,7 @@ const CbzExtractor = () => {
   );
 };
 
-// export default CbzExtractor;
+export default CbzExtractor;
 
 // "use client";
 
