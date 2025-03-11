@@ -58,13 +58,9 @@ const CbzExtractor = () => {
       event.preventDefault();
       setIsDragging(false);
 
-      if (!event.dataTransfer) return;
-
-      const files = Array.from(event.dataTransfer.files);
-      if (files.length > 0) {
-        processFiles(files);
-      } else {
-        alert("Tidak ada file yang dapat diproses.");
+      if (fileInputRef.current) {
+        fileInputRef.current.webkitdirectory = true;
+        fileInputRef.current.directory = true;
       }
     };
 
