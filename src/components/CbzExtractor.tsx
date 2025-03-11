@@ -13,6 +13,22 @@ interface ExtractedFile {
   compressed: Blob;
 }
 
+interface HTMLInputEvent extends Event {
+  target: HTMLInputElement & {
+    files: FileList;
+  };
+}
+
+interface WebkitDirectoryHTMLInputElement extends HTMLInputElement {
+  webkitdirectory: boolean;
+  directory: boolean;
+}
+
+interface CustomInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  webkitdirectory?: string;
+  directory?: string;
+}
+
 const CbzExtractor = () => {
   const [extracting, setExtracting] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -21,6 +37,10 @@ const CbzExtractor = () => {
   const [extractedFiles, setExtractedFiles] = useState<ExtractedFile[]>([]);
   const [compressMode, setCompressMode] = useState(true);
   const [isDragging, setIsDragging] = useState(false);
+
+  // Tambahkan ref untuk input file
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const personalFileInputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     const handleDragOver = (event: DragEvent) => {
@@ -101,6 +121,26 @@ const CbzExtractor = () => {
     }
   };
 
+  // Tambahkan fungsi download
+  const handleDownloadSingle = (index: number) => {
+    const file = extractedFiles[index];
+    if (compressMode) {
+      saveAs(file.compressed, `${file.name}_extracted.zip`);
+    } else {
+      saveAs(file.compressed, `${file.name}_extracted`);
+    }
+  };
+
+  const handleDownloadAll = () => {
+    extractedFiles.forEach((file) => {
+      if (compressMode) {
+        saveAs(file.compressed, `${file.name}_extracted.zip`);
+      } else {
+        saveAs(file.compressed, `${file.name}_extracted`);
+      }
+    });
+  };
+
   return (
     <div>
       {isDragging && (
@@ -135,10 +175,32 @@ const CbzExtractor = () => {
         </CardHeader>
 
         <CardContent>
-          {/* Input File */}
+          {/* Input File untuk Folder */}
           <div className="space-y-2">
+            <label className="text-sm font-medium">Pilih Folder:</label>
+            <input
+              {...({
+                ref: fileInputRef,
+                type: "file",
+                webkitdirectory: true,
+                directory: true,
+                multiple: true,
+                onChange: (e) => {
+                  const files = Array.from(e.target.files || []);
+                  processFiles(files);
+                },
+                disabled: extracting,
+                className:
+                  "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+              } as React.InputHTMLAttributes<WebkitDirectoryHTMLInputElement>)}
+            />
+          </div>
+
+          {/* Input File untuk File Personal */}
+          <div className="space-y-2 mt-4">
             <label className="text-sm font-medium">Pilih File:</label>
             <Input
+              ref={personalFileInputRef}
               type="file"
               multiple
               onChange={(e) => {
@@ -216,9 +278,7 @@ const CbzExtractor = () => {
                       <span className="break-all pr-2">{file.name}</span>
                       <Button
                         size="sm"
-                        onClick={() =>
-                          saveAs(file.compressed, `${file.name}_extracted.zip`)
-                        }
+                        onClick={() => handleDownloadSingle(index)}
                         className="ml-2 shrink-0"
                       >
                         Download
@@ -228,14 +288,7 @@ const CbzExtractor = () => {
                 </ul>
               </div>
               {extractedFiles.length > 1 && (
-                <Button
-                  className="mt-4 w-full"
-                  onClick={() => {
-                    extractedFiles.forEach((file) => {
-                      saveAs(file.compressed, `${file.name}_extracted.zip`);
-                    });
-                  }}
-                >
+                <Button className="mt-4 w-full" onClick={handleDownloadAll}>
                   Download Semua
                 </Button>
               )}
