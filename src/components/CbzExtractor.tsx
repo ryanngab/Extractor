@@ -148,7 +148,7 @@ const CbzExtractor = () => {
     return new Promise(async (resolve) => {
       if (entry.isFile) {
         entry.file((file: File) => {
-          resolve(file.name.toLowerCase().endsWith(".cbz") ? [file] : []);
+          resolve([file]); // Terima semua jenis file
         });
       } else if (entry.isDirectory) {
         const dirReader = entry.createReader();
@@ -177,7 +177,7 @@ const CbzExtractor = () => {
     });
   };
 
-  const collectCbzFiles = async (
+  const collectFiles = async (
     items: DataTransferItemList | File[]
   ): Promise<File[]> => {
     const itemsArray =
@@ -191,7 +191,7 @@ const CbzExtractor = () => {
             return readFilesRecursively(entry);
           }
         } else if (item instanceof File) {
-          return item.name.toLowerCase().endsWith(".cbz") ? [item] : [];
+          return [item]; // Terima semua jenis file
         }
         return [];
       }
@@ -211,19 +211,19 @@ const CbzExtractor = () => {
       setCompleted(false);
       setExtractedFiles([]); // Reset extracted files
 
-      const cbzFiles = await collectCbzFiles(
+      const allFiles = await collectFiles(
         files instanceof FileList ? files : new DataTransfer().items
       );
 
-      if (cbzFiles.length === 0) {
-        alert("Tidak ada file CBZ yang ditemukan.");
+      if (allFiles.length === 0) {
+        alert("Tidak ada file yang ditemukan.");
         setExtracting(false);
         return;
       }
 
-      // Proses setiap file CBZ
-      for (let i = 0; i < cbzFiles.length; i++) {
-        await extractCbzFile(cbzFiles[i], i, cbzFiles.length);
+      // Proses setiap file
+      for (let i = 0; i < allFiles.length; i++) {
+        await extractCbzFile(allFiles[i], i, allFiles.length);
       }
 
       setCompleted(true);
@@ -331,7 +331,6 @@ const CbzExtractor = () => {
               ref={fileInputRef as any}
               type="file"
               multiple
-              accept=".cbz"
               onChange={handleFileUpload}
               disabled={extracting}
               className="mb-4"
@@ -345,7 +344,6 @@ const CbzExtractor = () => {
               ref={personalFileInputRef}
               type="file"
               multiple
-              accept=".cbz"
               onChange={handleFileUpload}
               disabled={extracting}
               className="mb-4"
