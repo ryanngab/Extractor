@@ -8,12 +8,18 @@ import { Progress } from "@/components/ui/progress";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 
+// Tambahkan interface untuk memperluas HTMLInputElement
+interface CustomInputElement extends HTMLInputElement {
+  webkitdirectory: boolean;
+  directory: boolean;
+}
+
 const CbzExtractor = () => {
   const [extracting, setExtracting] = useState(false);
   const [progress, setProgress] = useState(0);
   const [filesList, setFilesList] = useState<string[]>([]);
   const [completed, setCompleted] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const fileInputRef = useRef<CustomInputElement | null>(null);
   const dropRef = useRef<HTMLDivElement | null>(null);
   const [extractedFiles, setExtractedFiles] = useState<
     Array<{
@@ -26,7 +32,8 @@ const CbzExtractor = () => {
 
   useEffect(() => {
     if (fileInputRef.current) {
-      fileInputRef.current.removeAttribute("webkitdirectory"); // Default tidak menggunakan webkitdirectory
+      fileInputRef.current.webkitdirectory = true;
+      fileInputRef.current.directory = true;
     }
   }, []);
 
@@ -107,11 +114,43 @@ const CbzExtractor = () => {
       setFilesList([]);
       setProgress(0);
       setCompleted(false);
+      setExtractedFiles([]); // Reset extracted files
 
-      // Filter hanya file CBZ
-      const cbzFiles = files.filter((file) =>
-        file.name.toLowerCase().endsWith(".cbz")
-      );
+      // Fungsi rekursif untuk mencari file CBZ dalam folder
+      const findCbzFiles = (items: FileList | File[]): File[] => {
+        const cbzFiles: File[] = [];
+
+        Array.from(items).forEach((item: any) => {
+          if (item.webkitGetAsEntry) {
+            const entry = item.webkitGetAsEntry();
+            if (entry?.isDirectory) {
+              // Jika folder, baca kontennya secara rekursif
+              entry.createReader().readEntries((entries: any[]) => {
+                entries.forEach((entry) => {
+                  if (
+                    entry.isFile &&
+                    entry.name.toLowerCase().endsWith(".cbz")
+                  ) {
+                    entry.file((file: File) => cbzFiles.push(file));
+                  }
+                });
+              });
+            }
+          }
+
+          // Cek file langsung
+          if (
+            item instanceof File &&
+            item.name.toLowerCase().endsWith(".cbz")
+          ) {
+            cbzFiles.push(item);
+          }
+        });
+
+        return cbzFiles;
+      };
+
+      const cbzFiles = findCbzFiles(files);
 
       if (cbzFiles.length === 0) {
         alert("Tidak ada file CBZ yang ditemukan.");
@@ -142,15 +181,12 @@ const CbzExtractor = () => {
       <CardContent>
         {/* Input File */}
         <Input
-          ref={fileInputRef}
+          ref={fileInputRef as any}
           type="file"
           multiple
           accept=".cbz"
           onChange={handleFileUpload}
           disabled={extracting}
-          onClick={() =>
-            fileInputRef.current?.setAttribute("webkitdirectory", "")
-          } // Gunakan webkitdirectory saat diklik
         />
 
         {/* Drag & Drop Area */}
@@ -200,20 +236,27 @@ const CbzExtractor = () => {
         {extractedFiles.length > 0 && (
           <div className="mt-4">
             <p className="font-semibold">File yang sudah diekstrak:</p>
-            <ul className="list-disc pl-4 text-sm text-gray-600">
-              {extractedFiles.map((file, index) => (
-                <li key={index} className="flex items-center justify-between">
-                  <span>{file.name}</span>
-                  <Button
-                    size="sm"
-                    onClick={() => handleDownloadSingle(index)}
-                    className="ml-2"
+            <div className="max-h-60 overflow-y-auto">
+              {" "}
+              {/* Tambahkan container dengan scroll */}
+              <ul className="list-disc pl-4 text-sm text-gray-600">
+                {extractedFiles.map((file, index) => (
+                  <li
+                    key={index}
+                    className="flex items-center justify-between py-2"
                   >
-                    Download
-                  </Button>
-                </li>
-              ))}
-            </ul>
+                    <span className="break-all pr-2">{file.name}</span>
+                    <Button
+                      size="sm"
+                      onClick={() => handleDownloadSingle(index)}
+                      className="ml-2 shrink-0"
+                    >
+                      Download
+                    </Button>
+                  </li>
+                ))}
+              </ul>
+            </div>
             {extractedFiles.length > 1 && (
               <Button className="mt-4 w-full" onClick={handleDownloadAll}>
                 Download Semua
