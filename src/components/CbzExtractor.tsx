@@ -144,76 +144,61 @@ const CbzExtractor = () => {
     processFiles(files);
   };
 
-  // Tambahkan fungsi untuk membaca file dari folder secara rekursif
-  const getAllFilesFromDirectory = async (
-    entry: FileSystemEntry
-  ): Promise<File[]> => {
-    const files: File[] = [];
-
-    if (entry.isFile) {
-      const fileEntry = entry as FileSystemEntryWithFile;
-      return new Promise((resolve) => {
-        fileEntry.file((file: File) => {
-          if (file.name.toLowerCase().endsWith(".cbz")) {
-            files.push(file);
-          }
-          resolve(files);
+  const readFilesRecursively = async (entry: any): Promise<File[]> => {
+    return new Promise(async (resolve) => {
+      if (entry.isFile) {
+        entry.file((file: File) => {
+          resolve(file.name.toLowerCase().endsWith(".cbz") ? [file] : []);
         });
-      });
-    } else if (entry.isDirectory) {
-      const dirReader = (entry as FileSystemDirectoryEntry).createReader();
-      const entries = await new Promise<FileSystemEntry[]>((resolve) => {
-        dirReader.readEntries((entries) => resolve(entries));
-      });
-
-      const subFiles = await Promise.all(
-        entries.map((entry) => getAllFilesFromDirectory(entry))
-      );
-
-      return files.concat(...subFiles);
-    }
-
-    return files;
-  };
-
-  const handleDrop = async (event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-
-    try {
-      const items = Array.from(event.dataTransfer.items);
-      const filePromises = items.map(async (item) => {
-        const entry = item.webkitGetAsEntry();
-        if (!entry) return [];
-
-        if (entry.isFile) {
-          const fileEntry = entry as FileSystemEntryWithFile;
-          return new Promise<File[]>((resolve) => {
-            fileEntry.file((file: File) => {
-              if (file.name.toLowerCase().endsWith(".cbz")) {
-                resolve([file]);
+      } else if (entry.isDirectory) {
+        const dirReader = entry.createReader();
+        const entries: any[] = await new Promise((resolve) => {
+          const results: any[] = [];
+          const readEntries = () => {
+            dirReader.readEntries(async (entries: any[]) => {
+              if (entries.length === 0) {
+                resolve(results);
               } else {
-                resolve([]);
+                results.push(...entries);
+                readEntries();
               }
             });
-          });
-        } else if (entry.isDirectory) {
-          return getAllFilesFromDirectory(entry);
+          };
+          readEntries();
+        });
+
+        const filesInDir = await Promise.all(
+          entries.map((entry) => readFilesRecursively(entry))
+        );
+        resolve(filesInDir.flat());
+      } else {
+        resolve([]);
+      }
+    });
+  };
+
+  const collectCbzFiles = async (
+    items: DataTransferItemList | File[]
+  ): Promise<File[]> => {
+    const itemsArray =
+      items instanceof DataTransferItemList ? Array.from(items as any) : items;
+
+    const filePromises = (itemsArray as Array<DataTransferItem | File>).map(
+      async (item) => {
+        if ("webkitGetAsEntry" in item) {
+          const entry = (item as DataTransferItem).webkitGetAsEntry();
+          if (entry) {
+            return readFilesRecursively(entry);
+          }
+        } else if (item instanceof File) {
+          return item.name.toLowerCase().endsWith(".cbz") ? [item] : [];
         }
         return [];
-      });
-
-      const fileArrays = await Promise.all(filePromises);
-      const files = fileArrays.flat();
-
-      if (files.length > 0) {
-        processFiles(files);
-      } else {
-        alert("Tidak ada file CBZ yang ditemukan dalam folder.");
       }
-    } catch (error) {
-      console.error("Error reading dropped files:", error);
-      alert("Terjadi kesalahan saat membaca file yang di-drop");
-    }
+    );
+
+    const results = await Promise.all(filePromises);
+    return results.flat();
   };
 
   const processFiles = async (files: File[]) => {
@@ -226,41 +211,9 @@ const CbzExtractor = () => {
       setCompleted(false);
       setExtractedFiles([]); // Reset extracted files
 
-      // Fungsi rekursif untuk mencari file CBZ dalam folder
-      const findCbzFiles = (items: FileList | File[]): File[] => {
-        const cbzFiles: File[] = [];
-
-        Array.from(items).forEach((item: any) => {
-          if (item.webkitGetAsEntry) {
-            const entry = item.webkitGetAsEntry();
-            if (entry?.isDirectory) {
-              // Jika folder, baca kontennya secara rekursif
-              entry.createReader().readEntries((entries: any[]) => {
-                entries.forEach((entry) => {
-                  if (
-                    entry.isFile &&
-                    entry.name.toLowerCase().endsWith(".cbz")
-                  ) {
-                    entry.file((file: File) => cbzFiles.push(file));
-                  }
-                });
-              });
-            }
-          }
-
-          // Cek file langsung
-          if (
-            item instanceof File &&
-            item.name.toLowerCase().endsWith(".cbz")
-          ) {
-            cbzFiles.push(item);
-          }
-        });
-
-        return cbzFiles;
-      };
-
-      const cbzFiles = findCbzFiles(files);
+      const cbzFiles = await collectCbzFiles(
+        files instanceof FileList ? files : new DataTransfer().items
+      );
 
       if (cbzFiles.length === 0) {
         alert("Tidak ada file CBZ yang ditemukan.");
@@ -279,6 +232,25 @@ const CbzExtractor = () => {
       alert("Terjadi kesalahan saat mengekstrak file");
     } finally {
       setExtracting(false);
+    }
+  };
+
+  const handleDrop = async (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    try {
+      const items = event.dataTransfer.items;
+      const files = await collectCbzFiles(items);
+
+      if (files.length > 0) {
+        processFiles(files);
+      } else {
+        alert("Tidak ada file CBZ yang ditemukan dalam folder.");
+      }
+    } catch (error) {
+      console.error("Error reading dropped files:", error);
+      alert("Terjadi kesalahan saat membaca file yang di-drop");
     }
   };
 
