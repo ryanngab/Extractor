@@ -107,11 +107,43 @@ const CbzExtractor = () => {
       setFilesList([]);
       setProgress(0);
       setCompleted(false);
+      setExtractedFiles([]); // Reset extracted files
 
-      // Filter hanya file CBZ
-      const cbzFiles = files.filter((file) =>
-        file.name.toLowerCase().endsWith(".cbz")
-      );
+      // Fungsi rekursif untuk mencari file CBZ dalam folder
+      const findCbzFiles = (items: FileList | File[]): File[] => {
+        const cbzFiles: File[] = [];
+
+        Array.from(items).forEach((item: any) => {
+          if (item.webkitGetAsEntry) {
+            const entry = item.webkitGetAsEntry();
+            if (entry?.isDirectory) {
+              // Jika folder, baca kontennya secara rekursif
+              entry.createReader().readEntries((entries: any[]) => {
+                entries.forEach((entry) => {
+                  if (
+                    entry.isFile &&
+                    entry.name.toLowerCase().endsWith(".cbz")
+                  ) {
+                    entry.file((file: File) => cbzFiles.push(file));
+                  }
+                });
+              });
+            }
+          }
+
+          // Cek file langsung
+          if (
+            item instanceof File &&
+            item.name.toLowerCase().endsWith(".cbz")
+          ) {
+            cbzFiles.push(item);
+          }
+        });
+
+        return cbzFiles;
+      };
+
+      const cbzFiles = findCbzFiles(files);
 
       if (cbzFiles.length === 0) {
         alert("Tidak ada file CBZ yang ditemukan.");
@@ -148,9 +180,8 @@ const CbzExtractor = () => {
           accept=".cbz"
           onChange={handleFileUpload}
           disabled={extracting}
-          onClick={() =>
-            fileInputRef.current?.setAttribute("webkitdirectory", "")
-          } // Gunakan webkitdirectory saat diklik
+          webkitdirectory="" // Tambahkan atribut ini untuk mendukung pemilihan folder
+          directory="" // Untuk browser non-webkit
         />
 
         {/* Drag & Drop Area */}
@@ -188,20 +219,27 @@ const CbzExtractor = () => {
         {extractedFiles.length > 0 && (
           <div className="mt-4">
             <p className="font-semibold">File yang sudah diekstrak:</p>
-            <ul className="list-disc pl-4 text-sm text-gray-600">
-              {extractedFiles.map((file, index) => (
-                <li key={index} className="flex items-center justify-between">
-                  <span>{file.name}</span>
-                  <Button
-                    size="sm"
-                    onClick={() => handleDownloadSingle(index)}
-                    className="ml-2"
+            <div className="max-h-60 overflow-y-auto">
+              {" "}
+              {/* Tambahkan container dengan scroll */}
+              <ul className="list-disc pl-4 text-sm text-gray-600">
+                {extractedFiles.map((file, index) => (
+                  <li
+                    key={index}
+                    className="flex items-center justify-between py-2"
                   >
-                    Download
-                  </Button>
-                </li>
-              ))}
-            </ul>
+                    <span className="break-all pr-2">{file.name}</span>
+                    <Button
+                      size="sm"
+                      onClick={() => handleDownloadSingle(index)}
+                      className="ml-2 shrink-0"
+                    >
+                      Download
+                    </Button>
+                  </li>
+                ))}
+              </ul>
+            </div>
             {extractedFiles.length > 1 && (
               <Button className="mt-4 w-full" onClick={handleDownloadAll}>
                 Download Semua
