@@ -1,7 +1,7 @@
 import AnimationContainer from "@/components/global/animation-container";
 import React from "react";
 import CbzExtractor from "../../../../components/CbzExtractor";
-
+import CbzExtractors from "../../../../components/CbzExtractor-1";
 const ChangeLogPage = () => {
   return (
     <div className="flex flex-col items-center justify-center py-20">
@@ -13,6 +13,7 @@ const ChangeLogPage = () => {
           Stay up to date with the latest changes to our platform.
         </p>
         <CbzExtractor />
+        <CbzExtractors />
       </AnimationContainer>
     </div>
   );

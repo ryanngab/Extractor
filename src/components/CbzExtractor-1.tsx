@@ -4,15 +4,14 @@ import { useEffect, useRef, useState } from "react";
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
 
-const CbzExtractor = () => {
+const CbzExtractors = () => {
   const [extracting, setExtracting] = useState(false);
   const [progress, setProgress] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const dropRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (fileInputRef.current) {
-      fileInputRef.current.removeAttribute("webkitdirectory"); // Default tidak menggunakan webkitdirectory
+      fileInputRef.current.setAttribute("webkitdirectory", ""); // Aktifkan folder upload otomatis
     }
   }, []);
 
@@ -31,6 +30,7 @@ const CbzExtractor = () => {
       );
 
       await Promise.all(extractPromises);
+
       const extractedZip = await extractFolder.generateAsync({ type: "blob" });
       saveAs(extractedZip, `${file.name.replace(".cbz", "")}_extracted.zip`);
     } catch (error) {
@@ -43,16 +43,6 @@ const CbzExtractor = () => {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const files = Array.from(event.target.files || []);
-    processFiles(files);
-  };
-
-  const handleDrop = async (event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    const files = Array.from(event.dataTransfer.files);
-    processFiles(files);
-  };
-
-  const processFiles = async (files: File[]) => {
     if (files.length === 0) return;
 
     try {
@@ -88,7 +78,6 @@ const CbzExtractor = () => {
     <div className="p-4">
       <h2 className="text-xl font-bold mb-4">CBZ Extractor (File & Folder)</h2>
 
-      {/* Input untuk Upload Folder */}
       <input
         ref={fileInputRef}
         type="file"
@@ -96,9 +85,6 @@ const CbzExtractor = () => {
         accept=".cbz"
         onChange={handleFileUpload}
         disabled={extracting}
-        onClick={() =>
-          fileInputRef.current?.setAttribute("webkitdirectory", "")
-        } // Gunakan webkitdirectory saat diklik
         className="block w-full text-sm text-gray-500
           file:mr-4 file:py-2 file:px-4
           file:rounded-full file:border-0
@@ -107,19 +93,9 @@ const CbzExtractor = () => {
           hover:file:bg-blue-100"
       />
 
-      {/* Area Drag & Drop */}
-      <div
-        ref={dropRef}
-        onDragOver={(e) => e.preventDefault()}
-        onDrop={handleDrop}
-        className="border-dashed border-2 border-gray-400 p-4 mt-4 text-center cursor-pointer bg-gray-100"
-      >
-        <p>Seret & Lepaskan file atau folder di sini</p>
-      </div>
-
-      {extracting && <p className="text-blue-500 mt-2">{progress}</p>}
+      {extracting && <p className="text-blue-500">{progress}</p>}
     </div>
   );
 };
 
-export default CbzExtractor;
+export default CbzExtractors;
