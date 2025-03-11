@@ -69,7 +69,7 @@ const CbzExtractor = () => {
       <h2 className="text-xl font-bold mb-4">CBZ Folder Extractor</h2>
       <input
         type="file"
-        webkitdirectory="true"
+        webkitdirectory={true as unknown as string} // Workaround TypeScript error
         // webkitdirectory=""
 
         multiple
