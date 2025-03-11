@@ -8,12 +8,17 @@ const CbzExtractor = () => {
   const [extracting, setExtracting] = useState(false);
   const [progress, setProgress] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [isFolderUpload, setIsFolderUpload] = useState(true); // Tambahkan toggle untuk folder/file
 
   useEffect(() => {
     if (fileInputRef.current) {
-      fileInputRef.current.setAttribute("webkitdirectory", "");
+      if (isFolderUpload) {
+        fileInputRef.current.setAttribute("webkitdirectory", ""); // Aktifkan folder upload
+      } else {
+        fileInputRef.current.removeAttribute("webkitdirectory"); // Nonaktifkan folder upload
+      }
     }
-  }, []);
+  }, [isFolderUpload]);
 
   const extractCbzFile = async (file: File) => {
     try {
@@ -39,7 +44,7 @@ const CbzExtractor = () => {
     }
   };
 
-  const handleFolderUpload = async (
+  const handleFileUpload = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const files = Array.from(event.target.files || []);
@@ -54,7 +59,7 @@ const CbzExtractor = () => {
       );
 
       if (cbzFiles.length === 0) {
-        alert("Tidak ada file CBZ yang ditemukan dalam folder");
+        alert("Tidak ada file CBZ yang ditemukan.");
         return;
       }
 
@@ -76,13 +81,35 @@ const CbzExtractor = () => {
 
   return (
     <div className="p-4">
-      <h2 className="text-xl font-bold mb-4">CBZ Folder Extractor</h2>
+      <h2 className="text-xl font-bold mb-4">CBZ Folder & File Extractor</h2>
+
+      {/* Tombol toggle antara upload folder & file */}
+      <div className="mb-2">
+        <label className="mr-2">Upload sebagai:</label>
+        <button
+          className={`px-3 py-1 rounded ${
+            isFolderUpload ? "bg-blue-600 text-white" : "bg-gray-300"
+          }`}
+          onClick={() => setIsFolderUpload(true)}
+        >
+          Folder
+        </button>
+        <button
+          className={`ml-2 px-3 py-1 rounded ${
+            !isFolderUpload ? "bg-blue-600 text-white" : "bg-gray-300"
+          }`}
+          onClick={() => setIsFolderUpload(false)}
+        >
+          File
+        </button>
+      </div>
+
       <input
         ref={fileInputRef}
         type="file"
         multiple
         accept=".cbz"
-        onChange={handleFolderUpload}
+        onChange={handleFileUpload}
         disabled={extracting}
         className="block w-full text-sm text-gray-500
           file:mr-4 file:py-2 file:px-4
@@ -91,6 +118,7 @@ const CbzExtractor = () => {
           file:bg-blue-50 file:text-blue-700
           hover:file:bg-blue-100"
       />
+
       {extracting && <p className="text-blue-500">{progress}</p>}
     </div>
   );
