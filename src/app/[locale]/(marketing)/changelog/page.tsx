@@ -13,7 +13,7 @@ const ChangeLogPage = () => {
           Stay up to date with the latest changes to our platform.
         </p>
         <CbzExtractor />
-        <CbzExtractors />
+        {/* <CbzExtractors /> */}
       </AnimationContainer>
     </div>
   );
