@@ -277,7 +277,21 @@ const CbzExtractor = () => {
   };
 
   return (
-    <div ref={dropRef}>
+    <div
+      ref={dropRef}
+      onDragOver={(e) => {
+        e.preventDefault();
+        e.currentTarget.classList.add("border-blue-500", "bg-blue-50");
+      }}
+      onDragLeave={(e) => {
+        e.currentTarget.classList.remove("border-blue-500", "bg-blue-50");
+      }}
+      onDrop={(e) => {
+        e.preventDefault();
+        e.currentTarget.classList.remove("border-blue-500", "bg-blue-50");
+        handleDrop(e);
+      }}
+    >
       {isDragging && (
         <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-50 flex items-center justify-center pointer-events-none">
           <div className="bg-white p-8 rounded-lg shadow-lg text-center">
@@ -340,18 +354,18 @@ const CbzExtractor = () => {
           {/* Drag & Drop Area dengan style yang lebih menarik */}
           <div
             // ref={dropRef}
-            onDragOver={(e) => {
-              e.preventDefault();
-              e.currentTarget.classList.add("border-blue-500", "bg-blue-50");
-            }}
-            onDragLeave={(e) => {
-              e.currentTarget.classList.remove("border-blue-500", "bg-blue-50");
-            }}
-            onDrop={(e) => {
-              e.preventDefault();
-              e.currentTarget.classList.remove("border-blue-500", "bg-blue-50");
-              handleDrop(e);
-            }}
+            // onDragOver={(e) => {
+            //   e.preventDefault();
+            //   e.currentTarget.classList.add("border-blue-500", "bg-blue-50");
+            // }}
+            // onDragLeave={(e) => {
+            //   e.currentTarget.classList.remove("border-blue-500", "bg-blue-50");
+            // }}
+            // onDrop={(e) => {
+            //   e.preventDefault();
+            //   e.currentTarget.classList.remove("border-blue-500", "bg-blue-50");
+            //   handleDrop(e);
+            // }}
             className="border-dashed border-2 border-gray-400 p-6 mt-4 text-center cursor-pointer bg-gray-100 rounded-lg transition-colors duration-200 hover:border-blue-500 hover:bg-blue-50"
           >
             <div className="space-y-2">
