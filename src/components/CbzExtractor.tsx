@@ -241,7 +241,40 @@ const CbzExtractor = () => {
 
     try {
       const items = event.dataTransfer.items;
-      const files = await collectCbzFiles(items);
+      if (!items) return;
+
+      // Menggunakan items untuk mendapatkan akses ke struktur folder
+      const entries = Array.from(items)
+        .map((item) => (item.webkitGetAsEntry ? item.webkitGetAsEntry() : null))
+        .filter((entry) => entry !== null);
+
+      const files: File[] = [];
+
+      // Fungsi untuk membaca folder secara rekursif
+      const readEntry = async (entry: any): Promise<void> => {
+        return new Promise((resolve) => {
+          if (entry.isFile) {
+            entry.file((file: File) => {
+              if (file.name.toLowerCase().endsWith(".cbz")) {
+                files.push(file);
+              }
+              resolve();
+            });
+          } else if (entry.isDirectory) {
+            const reader = entry.createReader();
+            reader.readEntries(async (entries: any[]) => {
+              const promises = entries.map((entry) => readEntry(entry));
+              await Promise.all(promises);
+              resolve();
+            });
+          } else {
+            resolve();
+          }
+        });
+      };
+
+      // Membaca semua entries
+      await Promise.all(entries.map((entry) => readEntry(entry)));
 
       if (files.length > 0) {
         processFiles(files);
