@@ -8,25 +8,15 @@ import { Progress } from "@/components/ui/progress";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 
-interface ExtractedFile {
-  name: string;
-  compressed: Blob;
-}
-
-interface HTMLInputEvent extends Event {
-  target: HTMLInputElement & {
-    files: FileList;
-  };
-}
-
-interface WebkitDirectoryHTMLInputElement extends HTMLInputElement {
+// Tambahkan interface untuk memperluas HTMLInputElement
+interface CustomInputElement extends HTMLInputElement {
   webkitdirectory: boolean;
   directory: boolean;
 }
 
-interface CustomInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  webkitdirectory?: string;
-  directory?: string;
+// Tambahkan interface untuk FileSystem API
+interface FileSystemEntryWithFile extends FileSystemEntry {
+  file(callback: (file: File) => void): void;
 }
 
 const CbzExtractor = () => {
@@ -34,63 +24,24 @@ const CbzExtractor = () => {
   const [progress, setProgress] = useState(0);
   const [filesList, setFilesList] = useState<string[]>([]);
   const [completed, setCompleted] = useState(false);
-  const [extractedFiles, setExtractedFiles] = useState<ExtractedFile[]>([]);
+  const fileInputRef = useRef<CustomInputElement | null>(null);
+  const dropRef = useRef<HTMLDivElement | null>(null);
+  const [extractedFiles, setExtractedFiles] = useState<
+    Array<{
+      name: string;
+      data: Blob;
+      compressed: Blob;
+    }>
+  >([]);
   const [compressMode, setCompressMode] = useState(true);
-  const [isDragging, setIsDragging] = useState(false);
-
-  // Tambahkan ref untuk input file
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const personalFileInputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
-    const handleDragOver = (event: DragEvent) => {
-      event.preventDefault();
-      setIsDragging(true);
-    };
-
-    const handleDragLeave = () => {
-      setIsDragging(false);
-    };
-
-    const handleDrop = async (event: DragEvent) => {
-      event.preventDefault();
-      setIsDragging(false);
-
-      if (!event.dataTransfer) return;
-
-      const files = Array.from(event.dataTransfer.files);
-      if (files.length > 0) {
-        processFiles(files);
-      } else {
-        alert("Tidak ada file yang dapat diproses.");
-      }
-    };
-
-    window.addEventListener("dragover", handleDragOver);
-    window.addEventListener("dragleave", handleDragLeave);
-    window.addEventListener("drop", handleDrop);
-
-    return () => {
-      window.removeEventListener("dragover", handleDragOver);
-      window.removeEventListener("dragleave", handleDragLeave);
-      window.removeEventListener("drop", handleDrop);
-    };
-  }, []);
-
-  const processFiles = async (files: File[]) => {
-    setExtracting(true);
-    setFilesList([]);
-    setProgress(0);
-    setCompleted(false);
-    setExtractedFiles([]);
-
-    for (let i = 0; i < files.length; i++) {
-      await extractCbzFile(files[i], i, files.length);
+    if (fileInputRef.current) {
+      fileInputRef.current.webkitdirectory = true;
+      fileInputRef.current.directory = true;
     }
-
-    setCompleted(true);
-    setExtracting(false);
-  };
+  }, []);
 
   const extractCbzFile = async (
     file: File,
@@ -103,31 +54,38 @@ const CbzExtractor = () => {
       const contents = await zip.loadAsync(file);
 
       const extractFolder = new JSZip();
-      await Promise.all(
-        Object.keys(contents.files).map(async (filename) => {
+      const extractPromises = Object.keys(contents.files).map(
+        async (filename) => {
           const fileData = await contents.files[filename].async("blob");
           extractFolder.file(filename, fileData);
-        })
+        }
       );
 
+      await Promise.all(extractPromises);
       const extractedZip = await extractFolder.generateAsync({ type: "blob" });
+      const extractedData = await extractFolder.generateAsync({ type: "blob" });
+
       setExtractedFiles((prev) => [
         ...prev,
-        { name: file.name.replace(".cbz", ""), compressed: extractedZip },
+        {
+          name: file.name.replace(".cbz", ""),
+          data: extractedData,
+          compressed: extractedZip,
+        },
       ]);
+
       setProgress(Math.round(((index + 1) / totalFiles) * 100));
     } catch (error) {
       console.error(`Gagal mengekstrak ${file.name}:`, error);
     }
   };
 
-  // Tambahkan fungsi download
   const handleDownloadSingle = (index: number) => {
     const file = extractedFiles[index];
     if (compressMode) {
       saveAs(file.compressed, `${file.name}_extracted.zip`);
     } else {
-      saveAs(file.compressed, `${file.name}_extracted`);
+      saveAs(file.data, `${file.name}_extracted`);
     }
   };
 
@@ -136,181 +94,299 @@ const CbzExtractor = () => {
       if (compressMode) {
         saveAs(file.compressed, `${file.name}_extracted.zip`);
       } else {
-        saveAs(file.compressed, `${file.name}_extracted`);
+        saveAs(file.data, `${file.name}_extracted`);
       }
     });
   };
 
+  const handleFileUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const files = Array.from(event.target.files || []);
+    processFiles(files);
+  };
+
+  // Tambahkan fungsi untuk membaca file dari folder secara rekursif
+  const getAllFilesFromDirectory = async (
+    entry: FileSystemEntry
+  ): Promise<File[]> => {
+    const files: File[] = [];
+
+    if (entry.isFile) {
+      const fileEntry = entry as FileSystemEntryWithFile;
+      return new Promise((resolve) => {
+        fileEntry.file((file: File) => {
+          if (file.name.toLowerCase().endsWith(".cbz")) {
+            files.push(file);
+          }
+          resolve(files);
+        });
+      });
+    } else if (entry.isDirectory) {
+      const dirReader = (entry as FileSystemDirectoryEntry).createReader();
+      const entries = await new Promise<FileSystemEntry[]>((resolve) => {
+        dirReader.readEntries((entries) => resolve(entries));
+      });
+
+      const subFiles = await Promise.all(
+        entries.map((entry) => getAllFilesFromDirectory(entry))
+      );
+
+      return files.concat(...subFiles);
+    }
+
+    return files;
+  };
+
+  const handleDrop = async (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+
+    try {
+      const items = Array.from(event.dataTransfer.items);
+      const filePromises = items.map(async (item) => {
+        const entry = item.webkitGetAsEntry();
+        if (!entry) return [];
+
+        if (entry.isFile) {
+          const fileEntry = entry as FileSystemEntryWithFile;
+          return new Promise<File[]>((resolve) => {
+            fileEntry.file((file: File) => {
+              if (file.name.toLowerCase().endsWith(".cbz")) {
+                resolve([file]);
+              } else {
+                resolve([]);
+              }
+            });
+          });
+        } else if (entry.isDirectory) {
+          return getAllFilesFromDirectory(entry);
+        }
+        return [];
+      });
+
+      const fileArrays = await Promise.all(filePromises);
+      const files = fileArrays.flat();
+
+      if (files.length > 0) {
+        processFiles(files);
+      } else {
+        alert("Tidak ada file CBZ yang ditemukan dalam folder.");
+      }
+    } catch (error) {
+      console.error("Error reading dropped files:", error);
+      alert("Terjadi kesalahan saat membaca file yang di-drop");
+    }
+  };
+
+  const processFiles = async (files: File[]) => {
+    if (files.length === 0) return;
+
+    try {
+      setExtracting(true);
+      setFilesList([]);
+      setProgress(0);
+      setCompleted(false);
+      setExtractedFiles([]); // Reset extracted files
+
+      // Fungsi rekursif untuk mencari file CBZ dalam folder
+      const findCbzFiles = (items: FileList | File[]): File[] => {
+        const cbzFiles: File[] = [];
+
+        Array.from(items).forEach((item: any) => {
+          if (item.webkitGetAsEntry) {
+            const entry = item.webkitGetAsEntry();
+            if (entry?.isDirectory) {
+              // Jika folder, baca kontennya secara rekursif
+              entry.createReader().readEntries((entries: any[]) => {
+                entries.forEach((entry) => {
+                  if (
+                    entry.isFile &&
+                    entry.name.toLowerCase().endsWith(".cbz")
+                  ) {
+                    entry.file((file: File) => cbzFiles.push(file));
+                  }
+                });
+              });
+            }
+          }
+
+          // Cek file langsung
+          if (
+            item instanceof File &&
+            item.name.toLowerCase().endsWith(".cbz")
+          ) {
+            cbzFiles.push(item);
+          }
+        });
+
+        return cbzFiles;
+      };
+
+      const cbzFiles = findCbzFiles(files);
+
+      if (cbzFiles.length === 0) {
+        alert("Tidak ada file CBZ yang ditemukan.");
+        setExtracting(false);
+        return;
+      }
+
+      // Proses setiap file CBZ
+      for (let i = 0; i < cbzFiles.length; i++) {
+        await extractCbzFile(cbzFiles[i], i, cbzFiles.length);
+      }
+
+      setCompleted(true);
+    } catch (error) {
+      console.error("Terjadi kesalahan:", error);
+      alert("Terjadi kesalahan saat mengekstrak file");
+    } finally {
+      setExtracting(false);
+    }
+  };
+
   return (
-    <div>
-      {isDragging && (
-        <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-50 flex items-center justify-center pointer-events-none">
-          <div className="bg-white p-8 rounded-lg shadow-lg text-center">
-            <svg
-              className="mx-auto h-12 w-12 text-blue-500 animate-bounce"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3 3m0 0l-3-3m3 3V8"
-              />
-            </svg>
-            <p className="mt-4 text-lg font-semibold text-gray-900">
-              Lepaskan file untuk mengupload
+    <Card className="w-full max-w-lg mx-auto p-6">
+      <CardHeader>
+        <CardTitle className="text-xl font-bold">CBZ Extractor</CardTitle>
+      </CardHeader>
+
+      <CardContent>
+        {/* Input File untuk Folder */}
+        <div className="space-y-2">
+          <label className="text-sm font-medium">Pilih Folder:</label>
+          <Input
+            ref={fileInputRef as any}
+            type="file"
+            multiple
+            accept=".cbz"
+            onChange={handleFileUpload}
+            disabled={extracting}
+            className="mb-4"
+          />
+        </div>
+
+        {/* Input File untuk File Personal */}
+        <div className="space-y-2 mt-4">
+          <label className="text-sm font-medium">Pilih File CBZ:</label>
+          <Input
+            ref={personalFileInputRef}
+            type="file"
+            multiple
+            accept=".cbz"
+            onChange={handleFileUpload}
+            disabled={extracting}
+            className="mb-4"
+          />
+        </div>
+
+        {/* Drag & Drop Area dengan style yang lebih menarik */}
+        <div
+          ref={dropRef}
+          onDragOver={(e) => {
+            e.preventDefault();
+            e.currentTarget.classList.add("border-blue-500", "bg-blue-50");
+          }}
+          onDragLeave={(e) => {
+            e.currentTarget.classList.remove("border-blue-500", "bg-blue-50");
+          }}
+          onDrop={(e) => {
+            e.preventDefault();
+            e.currentTarget.classList.remove("border-blue-500", "bg-blue-50");
+            handleDrop(e);
+          }}
+          className="border-dashed border-2 border-gray-400 p-6 mt-4 text-center cursor-pointer bg-gray-100 rounded-lg transition-colors duration-200 hover:border-blue-500 hover:bg-blue-50"
+        >
+          <div className="space-y-2">
+            <p className="text-gray-600">
+              Seret & Lepaskan file CBZ atau folder di sini
             </p>
-            <p className="mt-2 text-sm text-gray-500">
-              Seret dan lepaskan file atau folder di sini
+            <p className="text-sm text-gray-500">
+              Mendukung file CBZ tunggal atau folder berisi file CBZ
             </p>
           </div>
         </div>
-      )}
 
-      <Card className="w-full max-w-lg mx-auto p-6">
-        <CardHeader>
-          <CardTitle className="text-xl font-bold">File Extractor</CardTitle>
-        </CardHeader>
+        {/* Opsi Kompresi */}
+        <div className="mt-4 flex items-center gap-2">
+          <input
+            type="checkbox"
+            id="compressMode"
+            checked={compressMode}
+            onChange={(e) => setCompressMode(e.target.checked)}
+          />
+          <label htmlFor="compressMode">Download sebagai file ZIP</label>
+        </div>
 
-        <CardContent>
-          {/* Input File untuk Folder */}
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Pilih Folder:</label>
-            <input
-              {...({
-                ref: fileInputRef,
-                type: "file",
-                webkitdirectory: true,
-                directory: true,
-                multiple: true,
-                onChange: (e) => {
-                  const files = Array.from(e.target.files || []);
-                  processFiles(files);
-                },
-                disabled: extracting,
-                className:
-                  "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-              } as React.InputHTMLAttributes<WebkitDirectoryHTMLInputElement>)}
-            />
+        {/* Progress Bar */}
+        {extracting && (
+          <div className="mt-4">
+            <Progress value={progress} />
+            <p className="text-gray-500 text-sm mt-2">{progress}% selesai</p>
           </div>
+        )}
 
-          {/* Input File untuk File Personal */}
-          <div className="space-y-2 mt-4">
-            <label className="text-sm font-medium">Pilih File:</label>
-            <Input
-              ref={personalFileInputRef}
-              type="file"
-              multiple
-              onChange={(e) => {
-                const files = Array.from(e.target.files || []);
-                processFiles(files);
-              }}
-              disabled={extracting}
-              className="mb-4"
-            />
+        {/* Daftar File yang Sedang Diproses */}
+        {filesList.length > 0 && (
+          <div className="mt-4">
+            <p className="font-semibold">File yang sedang diproses:</p>
+            <ul className="list-disc pl-4 text-sm text-gray-600">
+              {filesList.map((file, index) => (
+                <li key={index}>{file}</li>
+              ))}
+            </ul>
           </div>
+        )}
 
-          {/* Area Drop */}
-          <div
-            onDragOver={(e) => {
-              e.preventDefault();
-              setIsDragging(true);
-            }}
-            onDragLeave={() => setIsDragging(false)}
-            onDrop={(e) => {
-              e.preventDefault();
-              setIsDragging(false);
-              if (!e.dataTransfer) return;
-              const files = Array.from(e.dataTransfer.files);
-              processFiles(files);
-            }}
-            className="border-dashed border-2 p-6 mt-4 text-center cursor-pointer rounded-lg transition-all duration-200 border-gray-400 bg-gray-100 hover:border-blue-500 hover:bg-blue-50"
-          >
-            <p className="text-gray-600">
-              Seret & Lepaskan file atau folder di sini
-            </p>
-          </div>
-
-          {/* Opsi Kompresi */}
-          <div className="mt-4 flex items-center gap-2">
-            <input
-              type="checkbox"
-              id="compressMode"
-              checked={compressMode}
-              onChange={(e) => setCompressMode(e.target.checked)}
-            />
-            <label htmlFor="compressMode">Download sebagai file ZIP</label>
-          </div>
-
-          {/* Progress dan Status */}
-          {extracting && (
-            <div className="mt-4">
-              <Progress value={progress} />
-              <p className="text-gray-500 text-sm mt-2">{progress}% selesai</p>
-            </div>
-          )}
-
-          {/* Daftar File yang Diproses */}
-          {filesList.length > 0 && (
-            <div className="mt-4">
-              <p className="font-semibold">File yang sedang diproses:</p>
+        {/* Daftar File yang Sudah Diekstrak */}
+        {extractedFiles.length > 0 && (
+          <div className="mt-4">
+            <p className="font-semibold">File yang sudah diekstrak:</p>
+            <div className="max-h-60 overflow-y-auto">
+              {" "}
+              {/* Tambahkan container dengan scroll */}
               <ul className="list-disc pl-4 text-sm text-gray-600">
-                {filesList.map((file, index) => (
-                  <li key={index}>{file}</li>
+                {extractedFiles.map((file, index) => (
+                  <li
+                    key={index}
+                    className="flex items-center justify-between py-2"
+                  >
+                    <span className="break-all pr-2">{file.name}</span>
+                    <Button
+                      size="sm"
+                      onClick={() => handleDownloadSingle(index)}
+                      className="ml-2 shrink-0"
+                    >
+                      Download
+                    </Button>
+                  </li>
                 ))}
               </ul>
             </div>
-          )}
+            {extractedFiles.length > 1 && (
+              <Button className="mt-4 w-full" onClick={handleDownloadAll}>
+                Download Semua
+              </Button>
+            )}
+          </div>
+        )}
 
-          {/* Daftar File yang Sudah Diekstrak */}
-          {extractedFiles.length > 0 && (
-            <div className="mt-4">
-              <p className="font-semibold">File yang sudah diekstrak:</p>
-              <div className="max-h-60 overflow-y-auto">
-                <ul className="list-disc pl-4 text-sm text-gray-600">
-                  {extractedFiles.map((file, index) => (
-                    <li
-                      key={index}
-                      className="flex items-center justify-between py-2"
-                    >
-                      <span className="break-all pr-2">{file.name}</span>
-                      <Button
-                        size="sm"
-                        onClick={() => handleDownloadSingle(index)}
-                        className="ml-2 shrink-0"
-                      >
-                        Download
-                      </Button>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              {extractedFiles.length > 1 && (
-                <Button className="mt-4 w-full" onClick={handleDownloadAll}>
-                  Download Semua
-                </Button>
-              )}
-            </div>
-          )}
+        {/* Status Selesai */}
+        {completed && !extracting && (
+          <p className="text-green-600 font-semibold mt-4">
+            Semua file berhasil diekstrak!
+          </p>
+        )}
 
-          {completed && !extracting && (
-            <p className="text-green-600 font-semibold mt-4">
-              Semua file berhasil diekstrak!
-            </p>
-          )}
-
-          <Button
-            className="mt-4 w-full"
-            onClick={() => window.location.reload()}
-            disabled={extracting}
-          >
-            Reset
-          </Button>
-        </CardContent>
-      </Card>
-    </div>
+        {/* Tombol Reset */}
+        <Button
+          className="mt-4 w-full"
+          onClick={() => window.location.reload()}
+          disabled={extracting}
+        >
+          Reset
+        </Button>
+      </CardContent>
+    </Card>
   );
 };
 
