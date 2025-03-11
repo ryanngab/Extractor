@@ -14,6 +14,11 @@ interface CustomInputElement extends HTMLInputElement {
   directory: boolean;
 }
 
+// Tambahkan interface untuk FileSystem API
+interface FileSystemEntryWithFile extends FileSystemEntry {
+  file(callback: (file: File) => void): void;
+}
+
 const CbzExtractor = () => {
   const [extracting, setExtracting] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -29,6 +34,7 @@ const CbzExtractor = () => {
     }>
   >([]);
   const [compressMode, setCompressMode] = useState(true);
+  const personalFileInputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     if (fileInputRef.current) {
@@ -100,10 +106,76 @@ const CbzExtractor = () => {
     processFiles(files);
   };
 
+  // Tambahkan fungsi untuk membaca file dari folder secara rekursif
+  const getAllFilesFromDirectory = async (
+    entry: FileSystemEntry
+  ): Promise<File[]> => {
+    const files: File[] = [];
+
+    if (entry.isFile) {
+      const fileEntry = entry as FileSystemEntryWithFile;
+      return new Promise((resolve) => {
+        fileEntry.file((file: File) => {
+          if (file.name.toLowerCase().endsWith(".cbz")) {
+            files.push(file);
+          }
+          resolve(files);
+        });
+      });
+    } else if (entry.isDirectory) {
+      const dirReader = (entry as FileSystemDirectoryEntry).createReader();
+      const entries = await new Promise<FileSystemEntry[]>((resolve) => {
+        dirReader.readEntries((entries) => resolve(entries));
+      });
+
+      const subFiles = await Promise.all(
+        entries.map((entry) => getAllFilesFromDirectory(entry))
+      );
+
+      return files.concat(...subFiles);
+    }
+
+    return files;
+  };
+
   const handleDrop = async (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
-    const files = Array.from(event.dataTransfer.files);
-    processFiles(files);
+
+    try {
+      const items = Array.from(event.dataTransfer.items);
+      const filePromises = items.map(async (item) => {
+        const entry = item.webkitGetAsEntry();
+        if (!entry) return [];
+
+        if (entry.isFile) {
+          const fileEntry = entry as FileSystemEntryWithFile;
+          return new Promise<File[]>((resolve) => {
+            fileEntry.file((file: File) => {
+              if (file.name.toLowerCase().endsWith(".cbz")) {
+                resolve([file]);
+              } else {
+                resolve([]);
+              }
+            });
+          });
+        } else if (entry.isDirectory) {
+          return getAllFilesFromDirectory(entry);
+        }
+        return [];
+      });
+
+      const fileArrays = await Promise.all(filePromises);
+      const files = fileArrays.flat();
+
+      if (files.length > 0) {
+        processFiles(files);
+      } else {
+        alert("Tidak ada file CBZ yang ditemukan dalam folder.");
+      }
+    } catch (error) {
+      console.error("Error reading dropped files:", error);
+      alert("Terjadi kesalahan saat membaca file yang di-drop");
+    }
   };
 
   const processFiles = async (files: File[]) => {
@@ -179,26 +251,59 @@ const CbzExtractor = () => {
       </CardHeader>
 
       <CardContent>
-        {/* Input File */}
-        <Input
-          ref={fileInputRef as any}
-          type="file"
-          multiple
-          accept=".cbz"
-          onChange={handleFileUpload}
-          disabled={extracting}
-        />
+        {/* Input File untuk Folder */}
+        <div className="space-y-2">
+          <label className="text-sm font-medium">Pilih Folder:</label>
+          <Input
+            ref={fileInputRef as any}
+            type="file"
+            multiple
+            accept=".cbz"
+            onChange={handleFileUpload}
+            disabled={extracting}
+            className="mb-4"
+          />
+        </div>
 
-        {/* Drag & Drop Area */}
+        {/* Input File untuk File Personal */}
+        <div className="space-y-2 mt-4">
+          <label className="text-sm font-medium">Pilih File CBZ:</label>
+          <Input
+            ref={personalFileInputRef}
+            type="file"
+            multiple
+            accept=".cbz"
+            onChange={handleFileUpload}
+            disabled={extracting}
+            className="mb-4"
+          />
+        </div>
+
+        {/* Drag & Drop Area dengan style yang lebih menarik */}
         <div
           ref={dropRef}
-          onDragOver={(e) => e.preventDefault()}
-          onDrop={handleDrop}
-          className="border-dashed border-2 border-gray-400 p-4 mt-4 text-center cursor-pointer bg-gray-100 rounded-lg"
+          onDragOver={(e) => {
+            e.preventDefault();
+            e.currentTarget.classList.add("border-blue-500", "bg-blue-50");
+          }}
+          onDragLeave={(e) => {
+            e.currentTarget.classList.remove("border-blue-500", "bg-blue-50");
+          }}
+          onDrop={(e) => {
+            e.preventDefault();
+            e.currentTarget.classList.remove("border-blue-500", "bg-blue-50");
+            handleDrop(e);
+          }}
+          className="border-dashed border-2 border-gray-400 p-6 mt-4 text-center cursor-pointer bg-gray-100 rounded-lg transition-colors duration-200 hover:border-blue-500 hover:bg-blue-50"
         >
-          <p className="text-gray-600">
-            Seret & Lepaskan file atau folder di sini
-          </p>
+          <div className="space-y-2">
+            <p className="text-gray-600">
+              Seret & Lepaskan file CBZ atau folder di sini
+            </p>
+            <p className="text-sm text-gray-500">
+              Mendukung file CBZ tunggal atau folder berisi file CBZ
+            </p>
+          </div>
         </div>
 
         {/* Opsi Kompresi */}
