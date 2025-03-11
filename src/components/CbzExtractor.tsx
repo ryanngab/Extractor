@@ -3,10 +3,16 @@
 import { useEffect, useRef, useState } from "react";
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 
 const CbzExtractor = () => {
   const [extracting, setExtracting] = useState(false);
-  const [progress, setProgress] = useState<string>("");
+  const [progress, setProgress] = useState(0);
+  const [filesList, setFilesList] = useState<string[]>([]);
+  const [completed, setCompleted] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const dropRef = useRef<HTMLDivElement | null>(null);
 
@@ -16,9 +22,13 @@ const CbzExtractor = () => {
     }
   }, []);
 
-  const extractCbzFile = async (file: File) => {
+  const extractCbzFile = async (
+    file: File,
+    index: number,
+    totalFiles: number
+  ) => {
     try {
-      setProgress(`Mengekstrak ${file.name}...`);
+      setFilesList((prev) => [...prev, file.name]);
       const zip = new JSZip();
       const contents = await zip.loadAsync(file);
 
@@ -32,10 +42,13 @@ const CbzExtractor = () => {
 
       await Promise.all(extractPromises);
       const extractedZip = await extractFolder.generateAsync({ type: "blob" });
+
       saveAs(extractedZip, `${file.name.replace(".cbz", "")}_extracted.zip`);
+
+      // Update progress
+      setProgress(Math.round(((index + 1) / totalFiles) * 100));
     } catch (error) {
       console.error(`Gagal mengekstrak ${file.name}:`, error);
-      setProgress(`Gagal mengekstrak ${file.name}`);
     }
   };
 
@@ -57,6 +70,9 @@ const CbzExtractor = () => {
 
     try {
       setExtracting(true);
+      setFilesList([]);
+      setProgress(0);
+      setCompleted(false);
 
       // Filter hanya file CBZ
       const cbzFiles = files.filter((file) =>
@@ -65,17 +81,16 @@ const CbzExtractor = () => {
 
       if (cbzFiles.length === 0) {
         alert("Tidak ada file CBZ yang ditemukan.");
+        setExtracting(false);
         return;
       }
 
-      setProgress(`Ditemukan ${cbzFiles.length} file CBZ`);
-
       // Proses setiap file CBZ
-      for (const file of cbzFiles) {
-        await extractCbzFile(file);
+      for (let i = 0; i < cbzFiles.length; i++) {
+        await extractCbzFile(cbzFiles[i], i, cbzFiles.length);
       }
 
-      setProgress("Semua file berhasil diekstrak!");
+      setCompleted(true);
     } catch (error) {
       console.error("Terjadi kesalahan:", error);
       alert("Terjadi kesalahan saat mengekstrak file");
@@ -85,40 +100,74 @@ const CbzExtractor = () => {
   };
 
   return (
-    <div className="p-4">
-      <h2 className="text-xl font-bold mb-4">CBZ Extractor (File & Folder)</h2>
+    <Card className="w-full max-w-lg mx-auto p-6">
+      <CardHeader>
+        <CardTitle className="text-xl font-bold">CBZ Extractor</CardTitle>
+      </CardHeader>
 
-      {/* Input untuk Upload Folder */}
-      <input
-        ref={fileInputRef}
-        type="file"
-        multiple
-        accept=".cbz"
-        onChange={handleFileUpload}
-        disabled={extracting}
-        onClick={() =>
-          fileInputRef.current?.setAttribute("webkitdirectory", "")
-        } // Gunakan webkitdirectory saat diklik
-        className="block w-full text-sm text-gray-500
-          file:mr-4 file:py-2 file:px-4
-          file:rounded-full file:border-0
-          file:text-sm file:font-semibold
-          file:bg-blue-50 file:text-blue-700
-          hover:file:bg-blue-100"
-      />
+      <CardContent>
+        {/* Input File */}
+        <Input
+          ref={fileInputRef}
+          type="file"
+          multiple
+          accept=".cbz"
+          onChange={handleFileUpload}
+          disabled={extracting}
+          onClick={() =>
+            fileInputRef.current?.setAttribute("webkitdirectory", "")
+          } // Gunakan webkitdirectory saat diklik
+        />
 
-      {/* Area Drag & Drop */}
-      <div
-        ref={dropRef}
-        onDragOver={(e) => e.preventDefault()}
-        onDrop={handleDrop}
-        className="border-dashed border-2 border-gray-400 p-4 mt-4 text-center cursor-pointer bg-gray-100"
-      >
-        <p>Seret & Lepaskan file atau folder di sini</p>
-      </div>
+        {/* Drag & Drop Area */}
+        <div
+          ref={dropRef}
+          onDragOver={(e) => e.preventDefault()}
+          onDrop={handleDrop}
+          className="border-dashed border-2 border-gray-400 p-4 mt-4 text-center cursor-pointer bg-gray-100 rounded-lg"
+        >
+          <p className="text-gray-600">
+            Seret & Lepaskan file atau folder di sini
+          </p>
+        </div>
 
-      {extracting && <p className="text-blue-500 mt-2">{progress}</p>}
-    </div>
+        {/* Progress Bar */}
+        {extracting && (
+          <div className="mt-4">
+            <Progress value={progress} />
+            <p className="text-gray-500 text-sm mt-2">{progress}% selesai</p>
+          </div>
+        )}
+
+        {/* Daftar File yang Sedang Diproses */}
+        {filesList.length > 0 && (
+          <div className="mt-4">
+            <p className="font-semibold">File yang sedang diproses:</p>
+            <ul className="list-disc pl-4 text-sm text-gray-600">
+              {filesList.map((file, index) => (
+                <li key={index}>{file}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {/* Status Selesai */}
+        {completed && !extracting && (
+          <p className="text-green-600 font-semibold mt-4">
+            Semua file berhasil diekstrak!
+          </p>
+        )}
+
+        {/* Tombol Reset */}
+        <Button
+          className="mt-4 w-full"
+          onClick={() => window.location.reload()}
+          disabled={extracting}
+        >
+          Reset
+        </Button>
+      </CardContent>
+    </Card>
   );
 };
 
