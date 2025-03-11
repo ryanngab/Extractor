@@ -277,7 +277,7 @@ const CbzExtractor = () => {
   };
 
   return (
-    <div>
+    <div ref={dropRef}>
       {isDragging && (
         <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-50 flex items-center justify-center pointer-events-none">
           <div className="bg-white p-8 rounded-lg shadow-lg text-center">
@@ -339,7 +339,7 @@ const CbzExtractor = () => {
 
           {/* Drag & Drop Area dengan style yang lebih menarik */}
           <div
-            ref={dropRef}
+            // ref={dropRef}
             onDragOver={(e) => {
               e.preventDefault();
               e.currentTarget.classList.add("border-blue-500", "bg-blue-50");
