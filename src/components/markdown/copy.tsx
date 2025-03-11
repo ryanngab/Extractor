@@ -74,13 +74,12 @@
 //     </>
 //   );
 // }
-
 "use client";
 
 import { CheckIcon, CopyIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import { useState, useEffect } from "react";
-import * as detectAdBlock from "just-detect-adblock";
+import { detectAnyAdblocker } from "just-detect-adblock"; // ✅ Import yang benar
 import {
   Dialog,
   DialogContent,
@@ -99,8 +98,12 @@ export default function Copy({ content }: { content: string }) {
   }, []);
 
   async function checkAdBlocker() {
-    const adblockDetected = await detectAdBlock.detectAnyAdblocker();
-    setIsAdBlockDetected(adblockDetected);
+    try {
+      const adblockDetected = await detectAnyAdblocker();
+      setIsAdBlockDetected(adblockDetected);
+    } catch (error) {
+      console.error("Error detecting AdBlock:", error);
+    }
   }
 
   async function handleCopy() {
