@@ -1,0 +1,301 @@
+{
+  "nav": {
+    "home": "Home",
+    "features": "Features",
+    "pricing": "Pricing",
+    "about": "About",
+    "login": "Login",
+    "start_trial": "Start Free Trial",
+    "enterprise": "Enterprise",
+    "resources": "Resources",
+    "changelog": "Changelog",
+    "features_menu": {
+      "link_shortening": "Link Shortening",
+      "link_shortening_desc": "Shorten links and track their performance.",
+      "password_protection": "Password Protection",
+      "password_protection_desc": "Secure your links with a password.",
+      "advanced_analytics": "Advanced Analytics",
+      "advanced_analytics_desc": "Gain insights into who is clicking your links.",
+      "custom_qr": "Custom QR Codes",
+      "custom_qr_desc": "Use QR codes to reach your audience.",
+      "all_features": "All Features",
+      "all_features_desc": "Manage links, track performance, and more."
+    },
+    "resources_menu": {
+      "blog": "Blog",
+      "blog_desc": "Read articles on the latest trends in tech.",
+      "tag": "Blog",
+      "tag_desc": "Read articles on the latest trends in tech.",
+      "help": "Help",
+      "help_desc": "Get answers to your questions."
+    }
+  },
+  "hero": {
+    "introducing": "Introducing Astra AI",
+    "title": "Build your next idea and ship your dream site",
+    "description": "Zero code, maximum speed. Make professional sites easy, fast and fun while delivering best-in-class SEO, performance.",
+    "cta": "Start building your dream website now!",
+    "get_started": "Get Started"
+  },
+  "process" : {
+    "badge" : "The Process",
+    "title" : "Three steps to build your dream website",
+    "description" : "Turn your vision into reality in just 3 simple steps",
+    "process_menu" : {
+      "auth" : {
+        "title" : "Sign Up",
+        "info" : "Create your free account to get started with Astra."
+      },
+      "customize" : {
+        "title" : "Customize",
+        "info" : "Choose a template and customize it to fit your needs."
+      },
+      "launch" : {
+        "title" : "Launch",
+        "info" : "Publish your website and share it with the world."
+      }
+    }
+  },
+ "services" : {
+  "badge" : "Our Best",
+  "title" : "Discover Services",
+  "description" : "We provide various services to meet your digital needs.",
+    "services_menu" : {
+      "1" : {
+        "title": "Website Development",
+        "subtitle": "@web_dev",
+        "description" : "We provide professional and responsive website development services."
+      },
+      "2" : {
+        "title": "Mobile App Development",
+        "subtitle": "@mobile_dev",
+        "description" : "We develop innovative and user-friendly mobile applications for various business needs."
+      },
+      "3" : {
+        "title": "Task Assistance",
+        "subtitle": "@task_helper",
+        "description" : "Task assistance services to help you complete your work quickly and accurately."
+      },
+      "4" : {
+        "title": "Feature Addition",
+        "subtitle": "@feature_addition",
+        "description" : "We help add new features to your website or application to enhance functionality."
+      },
+      "5" : {
+        "title": "SEO Optimization",
+        "subtitle": "@seo_expert",
+        "description" : "SEO optimization services to improve your website ranking on search engines."
+      },
+      "6" : {
+        "title": "Website Maintenance",
+        "subtitle": "@website_maintenance",
+        "description" : "We provide website maintenance services to keep it running optimally and securely."
+      },
+      "7" : {
+        "title": "Digital Marketing",
+        "subtitle": "@marketing_expert",
+        "description" : "Digital marketing strategies to increase brand awareness and sales."
+      },
+      "8" : {
+        "title": "Graphic Design",
+        "subtitle": "@graphic_designer",
+        "description" : "Graphic design services for branding, social media, and business promotion needs."
+      }
+    }
+  },
+  "features": {
+    "badge": "Features",
+    "title": "Discover our powerful features",
+    "description": "Astra offers a range of features to help you build a stunning website in no time",
+    "features_menu": {
+      "fast_setup": {
+        "title": "Fast Setup",
+        "info": "Get your website up and running in minutes with our intuitive AI-powered builder."
+      },
+      "customizable_templates": {
+        "title": "Customizable Templates",
+        "info": "Choose from a variety of stunning templates and customize them to suit your brand."
+      },
+      "seo_optimized": {
+        "title": "SEO Optimized",
+        "info": "Built-in SEO features ensure your website ranks well on search engines."
+      },
+      "responsive_design": {
+        "title": "Responsive Design",
+        "info": "Your website will look great on any device, from desktops to mobile phones."
+      },
+      "ecommerce_ready": {
+        "title": "E-Commerce Ready",
+        "info": "Start selling online with our e-commerce features and integrations."
+      },
+      "secure_hosting": {
+        "title": "Secure Hosting",
+        "info": "Enjoy peace of mind with secure and reliable hosting for your website."
+      }
+    }
+  },
+  "pricing" : {
+    "badge" : "Pricing",
+    "title" : "Unlock the right plan for your business" ,
+    "description" : " Choose the best plan for your business and start building your dream website today",
+    "pricing_menu" : {
+      "starter" : {
+        "title": "Starter",
+        "description": "Perfect for trying out plura",
+        "price": "Free",
+        "duration": "",
+        "highlight": "Key features",
+        "buttonText": "Start for free",
+        "features": ["Limited projects", "1 Team member", "Basic features"],
+        "priceId": ""
+      },
+      "unlimited" : {
+        "title": "Unlimited Saas",
+        "description": "The ultimate agency kit",
+        "price": "$199",
+        "duration" : "month",
+        "highlight": "Key features",
+        "buttonText": "Upgrade to Pro",
+        "features": ["Unlimited projects", "5 Team members", "Advanced design tools", "Customizable domain"],
+        "priceId": "price_1OYxkqFj9oKEERu1KfJGWxgN"
+      },
+      "enterprise" : {
+        "title" : "Enterprise",
+        "description" : "For serious agency owners",
+        "price" : "$399",
+        "duration" : "month",
+        "highlight" : "Everything in Starter, plus",
+        "buttonText" : "Upgrade to Enterprise",
+        "features" : ["Unlimited projects", "Unlimited Team members", "Custom branding", "Priority support (24/7)"],
+        "priceId" : "price_1OYxkqFj9oKEERu1NbKUxXxN"
+      }
+    }
+  },
+  "testimonial" : {
+    "badge" : "Our Customers",
+    "title" : "What people are saying",
+    "description" : "See how Astra empowers businesses of all sizes. Here's what real people are saying on Twitter",
+    "testimonial_people" : {
+      "jack" : {
+        "testimonial" : "I've never seen anything like this before. It's amazing. I love it."
+      },
+      "jill" : {
+        "testimonial" : "I don't know what to say. I'm speechless. This is amazing."
+      },
+      "john" : {
+        "testimonial" : "I'm at a loss for words. This is amazing. I love it."
+      },
+      "jane" : {
+        "testimonial" : "I've never seen anything like this before. It's amazing. I love it."
+      },
+      "jenny" : {
+        "testimonial" : "I've never seen anything like this before. It's amazing. I love it."
+      },
+      "james" : {
+        "testimonial" : "I've never seen anything like this before. It's amazing. I love it."
+      }
+    }
+  },
+  "newsletter" : {
+    "title" : "From Idea to Launch <br /> Faster Than Ever",
+    "description" : "Build stunning websites with Astra&apos;s intuitive drag-and-drop builder and powerful AI assistant",
+    "get_started" : "Get Started",
+    "join_title" : "Join our newsletter",
+    "join_description" : "Be up to date with everything about AI builder",
+    "placeholder" : "Enter your email",
+    " Subscribe": " Subscribe",
+    "by" : "By subscribing you agree with our",
+    "police" : "Privacy Policy"
+  },
+  "contact" : {
+    "badge" : "Contact Us",
+    "title" : "Get in Touch",
+    "description" : "Have a question or need support? We're here to help.",
+    "address" : "Find us",
+    "call" : "Call us",
+    "mail" : "Mail US",
+    "visit" : "Visit us",
+    "day" : "Senin - Minggu",
+    "subject_menu" : {
+      "1" : {
+        "subject" : "Web Development"
+      },
+      "2" : {
+        "subject" : "Mobile Development"
+      },
+      "3" : {
+        "subject" : "Joki Tugas"
+      },
+      "4" : {
+        "subject" : "Fullstack Project"
+      },
+      "5" : {
+        "subject" : "Tambah Fitur "
+      },
+      "6" : {
+        "subject" : "Optimasi Seo"
+      }
+    }
+  },
+  "blog" : {
+    "title" : "Blog",
+    "description" : "All the latest blogs and news, straight from the team."
+  },
+  "tags" : {
+    "title" : "All Tags "
+  },
+  "help" : {
+    "title" : "Help",
+    "description" : "Need help? We got you."
+  },
+  "change" : {
+    "title" : "Change Log",
+    "description" : "Stay up to date with the latest changes to our platform."
+  },
+  "enterprise" : {
+    "title" : "Enterprise",
+    "description" : "Get in touch with us to learn more about our enterprise solutions."
+  },
+  "faq" : {
+    "title" : "Frequently Asked Questions",
+    "description" : "Here are some of the most common questions we get asked. If you have a question that isn't answered here, feel free to reach out to us.",
+    "faq_menu" : {
+      "1" : {
+        "question" : "Is it accessible?",
+        "answered" : "Yes. It adheres to the WAI-ARIA design pattern, ensuring accessibility for all users."
+      },
+      "2" : {
+        "question" : "What features does the software offer?",
+        "answered" : "Our link management software offers features like link shortening, click tracking, customizable branded links, and AI-powered suggestions."
+      },
+      "3" : {
+        "question" : "How does the pricing work?",
+        "answered" : "We offer three plans: Free, Pro ($9/month), and Business ($49/month). Yearly subscriptions come with a discount."
+      },
+      "4" : {
+        "question" : "Can I upgrade or downgrade my plan?",
+        "answered" : "Yes! You can easily upgrade or downgrade your plan at any time through your account settings."
+      },
+      "5" : {
+        "question" : "Is there customer support available?",
+        "answered" : "Absolutely! We provide community support for all users and priority support for Pro and Business plan subscribers."
+      },
+      "6" : {
+        "question" : "Can I track my link clicks?",
+        "answered" : "Yes, our software allows you to track clicks on your links, providing insights into user engagement and demographics."
+      },
+      "7" : {
+        "question" : "Is there a mobile app available?",
+        "answered" : "Currently, we do not have a dedicated mobile app, but our web application is fully responsive and works well on mobile devices."
+      },
+      "8" : {
+        "question" : "What payment methods do you accept?",
+        "answered" : "We accept various payment methods including credit cards, PayPal, and other secure payment options."
+      }
+    }
+  },
+  "common": {
+    "welcome": "Welcome"
+  }
+
+} 

@@ -1,0 +1,449 @@
+---
+title: "ffffve"
+description: "Explore how to create a recursive file system in React. This blog post provides a comprehensive guide on building a file system where folders and files can be nested, added, renamed, and deleted."
+date: 02-09-2024
+tags: ["NextJS", "React", "Novel", "Products"]
+authors:
+  - avatar: "https://ui.shadcn.com/avatars/02.png"
+    handle: nisabmohd
+    username: Nisab Mohd
+    handleUrl: "https://github.com/nisabmohd"
+cover: "https://img.freepik.com/premium-vector/many-monsters-various-colors-doodle-come-bless-birthday-happy_577083-84.jpg?w=826"
+---
+
+## Introduction: Crafting a Recursive File System in React
+
+# Tutorial Komponen React
+
+<CodePreviewTabs
+  preview={
+    <div>
+      <h2>Hello World</h2>
+      <p>Ini adalah contoh preview komponen React</p>
+      <button style={{ padding: '8px 16px', background: 'blue', color: 'white', border: 'none', borderRadius: '4px' }}>
+        Klik Saya
+      </button>
+    </div>
+  }
+  code={`import React from 'react';
+
+function App() {
+return (
+<div>
+<h2>Hello World</h2>
+<p>Ini adalah contoh preview komponen React</p>
+<button style={{
+        padding: '8px 16px',
+        background: 'blue',
+        color: 'white',
+        border: 'none',
+        borderRadius: '4px'
+      }}>
+Klik Saya
+</button>
+</div>
+);
+}
+
+export default App;`}
+  language="jsx"
+  fileName="App.jsx"
+  treeData={[
+    {
+      name: "src",
+      type: "folder",
+      children: [
+        { 
+          name: "App.jsx", 
+          type: "file",
+          language: "jsx",
+          content: `import React from 'react';
+          
+function App() {
+  return (
+    <div>
+      <h2>Hello World</h2>
+      <p>Ini adalah contoh preview komponen React</p>
+      <button style={{ 
+        padding: '8px 16px', 
+        background: 'blue', 
+        color: 'white', 
+        border: 'none', 
+        borderRadius: '4px' 
+      }}>
+        Klik Saya
+      </button>
+    </div>
+  );
+}
+
+export default App;`
+        },
+        { 
+          name: "index.js", 
+          type: "file",
+          language: "js",
+          content: `import React from 'react';
+import ReactDOM from 'react-dom';
+import App from './App';
+
+ReactDOM.render(
+
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+  document.getElementById('root')
+);`
+        }
+      ]
+    },
+    {
+      name: "public",
+      type: "folder",
+      children: [
+        { name: "index.html", type: "file" }
+      ]
+    },
+    { name: "package.json", type: "file" }
+  ]}
+/>
+
+
+# Membuat Button Interaktif
+
+Pada tutorial ini, kita akan belajar membuat button yang berubah warna saat diklik menggunakan HTML, CSS, dan JavaScript.
+
+<CodePreviewTabs
+  useTreePreview={true}
+  treeData={[
+    {
+      name: "project-button",
+      type: "folder",
+      children: [
+        {
+          name: "index.html",
+          type: "file",
+          language: "html",
+          content: `
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Button Interaktif</title>
+</head>
+<body>
+    <div class="container">
+        <button id="color-button" class="btn">
+            <span>Klik Saya</span>
+        </button>
+        <p class="hint">Klik button untuk melihat perubahan warna</p>
+    </div>
+</body>
+</html>
+          `
+        },
+        {
+          name: "styles.css",
+          type: "file",
+          language: "css",
+          content: `
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f5f5f5;
+}
+
+.container {
+    text-align: center;
+}
+
+.btn {
+    padding: 12px 24px;
+    background-color: #4287f5;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn.red {
+    background-color: #e74c3c;
+}
+
+.btn.green {
+    background-color: #2ecc71;
+}
+
+.btn.purple {
+    background-color: #9b59b6;
+}
+
+.btn.yellow {
+    background-color: #f1c40f;
+    color: #333;
+}
+
+.hint {
+    margin-top: 16px;
+    font-size: 14px;
+    color: #666;
+}
+          `
+        },
+        {
+          name: "script.js",
+          type: "file",
+          language: "javascript",
+          content: `
+// Mendapatkan referensi ke button
+const button = document.getElementById('color-button');
+const buttonText = button.querySelector('span');
+let clickCount = 0;
+
+// Array warna yang akan digunakan secara bergantian
+const colors = ['red', 'green', 'purple', 'yellow', ''];
+
+// Listener untuk event click pada button
+button.addEventListener('click', function() {
+    // Menambahkan counter
+    clickCount++;
+    buttonText.textContent = \`Klik ke-\${clickCount}\`;
+    
+    // Mendapatkan class warna saat ini
+    let currentColorClass = '';
+    for (const color of colors) {
+        if (color && button.classList.contains(color)) {
+            currentColorClass = color;
+            break;
+        }
+    }
+    
+    // Mendapatkan index warna berikutnya
+    const currentIndex = colors.indexOf(currentColorClass);
+    const nextIndex = (currentIndex + 1) % colors.length;
+    
+    // Menghapus class warna saat ini
+    if (currentColorClass) {
+        button.classList.remove(currentColorClass);
+    }
+    
+    // Menambahkan class warna berikutnya
+    if (colors[nextIndex]) {
+        button.classList.add(colors[nextIndex]);
+    }
+});
+          `
+        }
+      ]
+    }
+  ]}
+/>
+
+## Penjelasan
+
+Tutorial ini menunjukkan cara membuat button interaktif dengan HTML, CSS, dan JavaScript. Ketika button diklik, warnanya akan berubah dan teks akan menampilkan jumlah klik.
+
+## Langkah-langkah Pembuatan
+
+### 1. Struktur HTML
+
+Pertama, kita buat struktur HTML dasar dengan sebuah button:
+
+```html
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Button Interaktif</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <button id="color-button" class="btn">
+            <span>Klik Saya</span>
+        </button>
+        <p class="hint">Klik button untuk melihat perubahan warna</p>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
+```
+
+### 2. Styling dengan CSS
+
+Pada file `styles.css`, kita akan membuat button yang menarik dengan efek hover dan warna-warna yang berbeda:
+
+```css
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f5f5f5;
+}
+
+.container {
+    text-align: center;
+}
+
+.btn {
+    padding: 12px 24px;
+    background-color: #4287f5;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.5s, height 0.5s;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn:active::before {
+    width: 300px;
+    height: 300px;
+    opacity: 0;
+}
+
+.btn.red {
+    background-color: #e74c3c;
+}
+
+.btn.green {
+    background-color: #2ecc71;
+}
+
+.btn.purple {
+    background-color: #9b59b6;
+}
+
+.btn.yellow {
+    background-color: #f1c40f;
+    color: #333;
+}
+
+.hint {
+    margin-top: 16px;
+    font-size: 14px;
+    color: #666;
+}
+```
+
+### 3. Interaktivitas dengan JavaScript
+
+Terakhir, kita tambahkan JavaScript untuk membuat button interaktif dan berubah warna saat diklik:
+
+```javascript
+// Mendapatkan referensi ke button
+const button = document.getElementById('color-button');
+const buttonText = button.querySelector('span');
+let clickCount = 0;
+
+// Array warna yang akan digunakan secara bergantian
+const colors = ['red', 'green', 'purple', 'yellow', ''];
+
+// Listener untuk event click pada button
+button.addEventListener('click', function() {
+    // Menambahkan counter
+    clickCount++;
+    buttonText.textContent = \`Klik ke-\${clickCount}\`;
+    
+    // Mendapatkan class warna saat ini
+    let currentColorClass = '';
+    for (const color of colors) {
+        if (color && button.classList.contains(color)) {
+            currentColorClass = color;
+            break;
+        }
+    }
+    
+    // Mendapatkan index warna berikutnya
+    const currentIndex = colors.indexOf(currentColorClass);
+    const nextIndex = (currentIndex + 1) % colors.length;
+    
+    // Menghapus class warna saat ini
+    if (currentColorClass) {
+        button.classList.remove(currentColorClass);
+    }
+    
+    // Menambahkan class warna berikutnya
+    if (colors[nextIndex]) {
+        button.classList.add(colors[nextIndex]);
+    }
+    
+    // Membuat efek riak air (ripple)
+    createRippleEffect(event);
+});
+
+// Fungsi untuk membuat efek riak air (ripple)
+function createRippleEffect(event) {
+    const x = event.clientX - button.getBoundingClientRect().left;
+    const y = event.clientY - button.getBoundingClientRect().top;
+    
+    const ripple = document.createElement('span');
+    ripple.classList.add('ripple');
+    ripple.style.left = \`\${x}px\`;
+    ripple.style.top = \`\${y}px\`;
+    
+    button.appendChild(ripple);
+    
+    // Menghapus elemen ripple setelah animasi selesai
+    setTimeout(() => {
+        ripple.remove();
+    }, 500);
+}
+```
+
+## Kesimpulan
+
+Dengan menggabungkan HTML, CSS, dan JavaScript, kita telah berhasil membuat button interaktif yang berubah warna setiap kali diklik. 
+
+Anda dapat mengembangkan button ini lebih lanjut dengan menambahkan animasi, efek suara, atau mengubah fungsinya sesuai kebutuhan proyek Anda.

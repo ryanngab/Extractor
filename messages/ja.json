@@ -1,0 +1,300 @@
+{
+  "nav": {
+    "home": "ホーム",
+    "features": "機能",
+    "pricing": "料金プラン",
+    "about": "会社概要",
+    "login": "ログイン",
+    "start_trial": "無料トライアル開始",
+    "enterprise": "エンタープライズ",
+    "resources": "リソース",
+    "changelog": "更新履歴",
+    "features_menu": {
+      "link_shortening": "リンク短縮",
+      "link_shortening_desc": "リンクを短縮し、パフォーマンスを追跡します。",
+      "password_protection": "パスワード保護",
+      "password_protection_desc": "リンクをパスワードで保護します。",
+      "advanced_analytics": "高度な分析",
+      "advanced_analytics_desc": "リンクをクリックしているユーザーの分析情報を取得します。",
+      "custom_qr": "カスタムQRコード",
+      "custom_qr_desc": "QRコードでオーディエンスにリーチします。",
+      "all_features": "すべての機能",
+      "all_features_desc": "リンク管理、パフォーマンス追跡など。"
+    },
+    "resources_menu": {
+      "blog": "ブログ",
+      "blog_desc": "最新のテクノロジートレンドに関する記事を読む。",
+      "tag": "ブログ",
+      "tag_desc": "最新のテクノロジートレンドに関する記事を読む。",
+      "help": "ヘルプ",
+      "help_desc": "質問への回答を得る。"
+    }
+  },
+  "hero": {
+    "introducing": "Astra AIの紹介",
+    "title": "次のアイデアを構築し、夢のサイトを公開",
+    "description": "コード不要、最高速度。プロフェッショナルなサイトを簡単、迅速、楽しく作成しながら、最高クラスのSEO、パフォーマンスを実現。",
+    "cta": "今すぐ夢のウェブサイトの構築を開始！",
+    "get_started": "始める"
+  },
+  "process": {
+    "badge": "プロセス",
+    "title": "夢のウェブサイトを構築する3つのステップ",
+    "description": "3つの簡単なステップでビジョンを現実に",
+    "process_menu": {
+      "auth": {
+        "title": "サインアップ",
+        "info": "Astraを始めるために無料アカウントを作成。"
+      },
+      "customize": {
+        "title": "カスタマイズ",
+        "info": "テンプレートを選択し、ニーズに合わせてカスタマイズ。"
+      },
+      "launch": {
+        "title": "ローンチ",
+        "info": "ウェブサイトを公開し、世界と共有。"
+      }
+    }
+  },
+  "services": {
+    "badge": "最高のサービス",
+    "title": "サービスを探す",
+    "description": "デジタルニーズに応える様々なサービスを提供しています。",
+    "services_menu": {
+      "1": {
+        "title": "ウェブサイト開発",
+        "subtitle": "@web_dev",
+        "description": "プロフェッショナルでレスポンシブなウェブサイト開発サービスを提供します。"
+      },
+      "2": {
+        "title": "モバイルアプリ開発",
+        "subtitle": "@mobile_dev",
+        "description": "様々なビジネスニーズに対応する革新的で使いやすいモバイルアプリケーションを開発します。"
+      },
+      "3": {
+        "title": "タスクアシスタンス",
+        "subtitle": "@task_helper",
+        "description": "作業を迅速かつ正確に完了するためのタスクアシスタンスサービス。"
+      },
+      "4": {
+        "title": "機能追加",
+        "subtitle": "@feature_addition",
+        "description": "ウェブサイトやアプリケーションの機能を強化する新機能の追加をサポートします。"
+      },
+      "5": {
+        "title": "SEO最適化",
+        "subtitle": "@seo_expert",
+        "description": "検索エンジンでのウェブサイトランキングを向上させるSEO最適化サービス。"
+      },
+      "6": {
+        "title": "ウェブサイトメンテナンス",
+        "subtitle": "@website_maintenance",
+        "description": "最適かつ安全な運用を維持するウェブサイトメンテナンスサービスを提供します。"
+      },
+      "7": {
+        "title": "デジタルマーケティング",
+        "subtitle": "@marketing_expert",
+        "description": "ブランド認知度と売上を向上させるデジタルマーケティング戦略。"
+      },
+      "8": {
+        "title": "グラフィックデザイン",
+        "subtitle": "@graphic_designer",
+        "description": "ブランディング、ソーシャルメディア、ビジネスプロモーションのためのグラフィックデザインサービス。"
+      }
+    }
+  },
+  "features": {
+    "badge": "機能",
+    "title": "パワフルな機能を発見",
+    "description": "Astraは、素晴らしいウェブサイトを短時間で構築するための様々な機能を提供します",
+    "features_menu": {
+      "fast_setup": {
+        "title": "迅速なセットアップ",
+        "info": "直感的なAIパワードビルダーで数分でウェブサイトを立ち上げ。"
+      },
+      "customizable_templates": {
+        "title": "カスタマイズ可能なテンプレート",
+        "info": "魅力的なテンプレートから選択し、ブランドに合わせてカスタマイズ。"
+      },
+      "seo_optimized": {
+        "title": "SEO最適化",
+        "info": "内蔵のSEO機能で検索エンジンでの高ランキングを確保。"
+      },
+      "responsive_design": {
+        "title": "レスポンシブデザイン",
+        "info": "デスクトップからモバイルまで、あらゆるデバイスで美しく表示。"
+      },
+      "ecommerce_ready": {
+        "title": "Eコマース対応",
+        "info": "Eコマース機能と統合でオンライン販売を開始。"
+      },
+      "secure_hosting": {
+        "title": "セキュアホスティング",
+        "info": "安全で信頼性の高いホスティングで安心を。"
+      }
+    }
+  },
+  "pricing": {
+    "badge": "料金プラン",
+    "title": "ビジネスに最適なプランを選択",
+    "description": "ビジネスに最適なプランを選択し、今日から夢のウェブサイト構築を開始",
+    "pricing_menu": {
+      "starter": {
+        "title": "スターター",
+        "description": "Pluraを試すのに最適",
+        "price": "無料",
+        "duration": "",
+        "highlight": "主な機能",
+        "buttonText": "無料で始める",
+        "features": ["プロジェクト数制限あり", "チームメンバー1名", "基本機能"],
+        "priceId": ""
+      },
+      "unlimited": {
+        "title": "無制限Saas",
+        "description": "究極のエージェンシーキット",
+        "price": "¥19,900",
+        "duration": "月額",
+        "highlight": "主な機能",
+        "buttonText": "Proにアップグレード",
+        "features": ["無制限プロジェクト", "チームメンバー5名", "高度なデザインツール", "カスタマイズ可能ドメイン"],
+        "priceId": "price_1OYxkqFj9oKEERu1KfJGWxgN"
+      },
+      "enterprise": {
+        "title": "エンタープライズ",
+        "description": "真剣なエージェンシーオーナー向け",
+        "price": "¥39,900",
+        "duration": "月額",
+        "highlight": "スターターのすべての機能に加えて",
+        "buttonText": "エンタープライズにアップグレード",
+        "features": ["無制限プロジェクト", "無制限チームメンバー", "カスタムブランディング", "優先サポート（24/7）"],
+        "priceId": "price_1OYxkqFj9oKEERu1NbKUxXxN"
+      }
+    }
+  },
+  "testimonial": {
+    "badge": "お客様の声",
+    "title": "みんなの声",
+    "description": "Astraがあらゆる規模のビジネスをどのように支援しているか。Twitterでの実際の声をご覧ください",
+    "testimonial_people": {
+      "jack": {
+        "testimonial": "これまでにないものを見ました。素晴らしいです。大好きです。"
+      },
+      "jill": {
+        "testimonial": "言葉を失うほど素晴らしいです。感動しました。"
+      },
+      "john": {
+        "testimonial": "言葉にできないほど素晴らしいです。大好きです。"
+      },
+      "jane": {
+        "testimonial": "これまでにないものを見ました。素晴らしいです。大好きです。"
+      },
+      "jenny": {
+        "testimonial": "これまでにないものを見ました。素晴らしいです。大好きです。"
+      },
+      "james": {
+        "testimonial": "これまでにないものを見ました。素晴らしいです。大好きです。"
+      }
+    }
+  },
+  "newsletter": {
+    "title": "アイデアからローンチまで <br /> かつてないほど速く",
+    "description": "Astraの直感的なドラッグ＆ドロップビルダーとパワフルなAIアシスタントで素晴らしいウェブサイトを構築",
+    "get_started": "始める",
+    "join_title": "ニュースレターに登録",
+    "join_description": "AIビルダーに関する最新情報をお届け",
+    "placeholder": "メールアドレスを入力",
+    "Subscribe": "登録",
+    "by": "登録することで、以下に同意したことになります",
+    "police": "プライバシーポリシー"
+  },
+  "contact": {
+    "badge": "お問い合わせ",
+    "title": "お問い合わせ",
+    "description": "ご質問やサポートが必要ですか？お手伝いさせていただきます。",
+    "address": "所在地",
+    "call": "お電話",
+    "mail": "メール",
+    "visit": "訪問",
+    "day": "月曜日～日曜日",
+    "subject_menu": {
+      "1": {
+        "subject": "ウェブ開発"
+      },
+      "2": {
+        "subject": "モバイル開発"
+      },
+      "3": {
+        "subject": "タスク支援"
+      },
+      "4": {
+        "subject": "フルスタックプロジェクト"
+      },
+      "5": {
+        "subject": "機能追加"
+      },
+      "6": {
+        "subject": "SEO最適化"
+      }
+    }
+  },
+  "blog": {
+    "title": "ブログ",
+    "description": "チームからの最新のブログとニュース。"
+  },
+  "tags": {
+    "title": "すべてのタグ"
+  },
+  "help": {
+    "title": "ヘルプ",
+    "description": "サポートが必要ですか？お任せください。"
+  },
+  "change": {
+    "title": "更新履歴",
+    "description": "プラットフォームの最新の変更をチェック。"
+  },
+  "enterprise": {
+    "title": "エンタープライズ",
+    "description": "エンタープライズソリューションについて詳しく知るにはお問い合わせください。"
+  },
+  "faq": {
+    "title": "よくある質問",
+    "description": "よく寄せられる質問をまとめました。ここに記載されていない質問がございましたら、お気軽にお問い合わせください。",
+    "faq_menu": {
+      "1": {
+        "question": "アクセシビリティに対応していますか？",
+        "answered": "はい。WAI-ARIAデザインパターンに準拠し、すべてのユーザーのアクセシビリティを確保しています。"
+      },
+      "2": {
+        "question": "どのような機能が提供されていますか？",
+        "answered": "リンク短縮、クリック追跡、カスタマイズ可能なブランドリンク、AI駆動の提案など、様々な機能を提供しています。"
+      },
+      "3": {
+        "question": "料金体系はどうなっていますか？",
+        "answered": "3つのプランを提供しています：無料、Pro（¥900/月）、ビジネス（¥4,900/月）。年間契約には割引があります。"
+      },
+      "4": {
+        "question": "プランのアップグレードやダウングレードは可能ですか？",
+        "answered": "はい！アカウント設定から簡単にプランの変更が可能です。"
+      },
+      "5": {
+        "question": "カスタマーサポートは利用できますか？",
+        "answered": "もちろんです！全ユーザーにコミュニティサポート、Proとビジネスプランユーザーには優先サポートを提供しています。"
+      },
+      "6": {
+        "question": "リンクのクリック数は追跡できますか？",
+        "answered": "はい、リンクのクリック数を追跡し、ユーザーエンゲージメントや属性情報を提供します。"
+      },
+      "7": {
+        "question": "モバイルアプリはありますか？",
+        "answered": "現在、専用のモバイルアプリはありませんが、ウェブアプリケーションは完全にレスポンシブでモバイルデバイスでも快適に使用できます。"
+      },
+      "8": {
+        "question": "どの支払い方法に対応していますか？",
+        "answered": "クレジットカード、PayPal、その他の安全な支払い方法に対応しています。"
+      }
+    }
+  },
+  "common": {
+    "welcome": "ようこそ"
+  }
+} 

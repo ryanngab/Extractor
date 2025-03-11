@@ -1,0 +1,350 @@
+{
+  "nav": {
+    "home": "Beranda",
+    "features": "Fitur",
+    "pricing": "Harga",
+    "about": "Tentang",
+    "login": "Masuk",
+    "start_trial": "Mulai Uji Coba Gratis",
+    "enterprise": "Perusahaan",
+    "resources": "Sumber Daya",
+    "changelog": "Catatan Perubahan",
+    "features_menu": {
+      "link_shortening": "Pemendekan Tautan",
+      "link_shortening_desc": "Perpendek tautan dan pantau kinerjanya.",
+      "password_protection": "Proteksi Kata Sandi",
+      "password_protection_desc": "Amankan tautan Anda dengan kata sandi.",
+      "advanced_analytics": "Analitik Lanjutan",
+      "advanced_analytics_desc": "Dapatkan wawasan tentang siapa yang mengklik tautan Anda.",
+      "custom_qr": "Kode QR Kustom",
+      "custom_qr_desc": "Gunakan kode QR untuk menjangkau audiens Anda.",
+      "all_features": "Semua Fitur",
+      "all_features_desc": "Kelola tautan, pantau kinerja, dan banyak lagi."
+    },
+    "resources_menu": {
+      "blog": "Blog",
+      "blog_desc": "Baca artikel tentang tren terbaru di dunia teknologi.",
+      "tag": "Blog",
+      "tag_desc": "Baca artikel tentang tren terbaru di dunia teknologi.",
+      "help": "Bantuan",
+      "help_desc": "Dapatkan jawaban atas pertanyaan Anda."
+    }
+  },
+  "hero": {
+    "introducing": "Memperkenalkan Astra AI",
+    "title": "Bangun ide Anda berikutnya dan luncurkan situs impian Anda",
+    "description": "Tanpa kode, kecepatan maksimal. Buat situs profesional dengan mudah, cepat dan menyenangkan sambil memberikan SEO dan kinerja terbaik.",
+    "cta": "Mulai bangun situs web impian Anda sekarang!",
+    "get_started": "Mulai"
+  },
+  "process": {
+    "badge": "Proses",
+    "title": "Tiga langkah untuk membangun situs web impian Anda",
+    "description": "Wujudkan visi Anda menjadi kenyataan hanya dalam 3 langkah sederhana",
+    "process_menu": {
+      "auth": {
+        "title": "Daftar",
+        "info": "Buat akun gratis Anda untuk mulai menggunakan Astra."
+      },
+      "customize": {
+        "title": "Kustomisasi",
+        "info": "Pilih template dan sesuaikan dengan kebutuhan Anda."
+      },
+      "launch": {
+        "title": "Luncurkan",
+        "info": "Publikasikan situs web Anda dan bagikan ke dunia."
+      }
+    }
+  },
+  "services": {
+    "badge": "Layanan Terbaik Kami",
+    "title": "Temukan Layanan",
+    "description": "Kami menyediakan berbagai layanan untuk memenuhi kebutuhan digital Anda.",
+    "services_menu": {
+      "1": {
+        "title": "Pengembangan Website",
+        "subtitle": "@web_dev",
+        "description": "Kami menyediakan layanan pengembangan website yang profesional dan responsif."
+      },
+      "2": {
+        "title": "Pengembangan Aplikasi Mobile",
+        "subtitle": "@mobile_dev",
+        "description": "Kami mengembangkan aplikasi mobile yang inovatif dan ramah pengguna untuk berbagai kebutuhan bisnis."
+      },
+      "3": {
+        "title": "Bantuan Tugas",
+        "subtitle": "@task_helper",
+        "description": "Layanan bantuan tugas untuk membantu Anda menyelesaikan pekerjaan dengan cepat dan akurat."
+      },
+      "4": {
+        "title": "Penambahan Fitur",
+        "subtitle": "@feature_addition",
+        "description": "Kami membantu menambahkan fitur baru ke website atau aplikasi Anda untuk meningkatkan fungsionalitas."
+      },
+      "5": {
+        "title": "Optimasi SEO",
+        "subtitle": "@seo_expert",
+        "description": "Layanan optimasi SEO untuk meningkatkan peringkat website Anda di mesin pencari."
+      },
+      "6": {
+        "title": "Pemeliharaan Website",
+        "subtitle": "@website_maintenance",
+        "description": "Kami menyediakan layanan pemeliharaan website agar tetap berjalan optimal dan aman."
+      },
+      "7": {
+        "title": "Pemasaran Digital",
+        "subtitle": "@marketing_expert",
+        "description": "Strategi pemasaran digital untuk meningkatkan kesadaran merek dan penjualan."
+      },
+      "8": {
+        "title": "Desain Grafis",
+        "subtitle": "@graphic_designer",
+        "description": "Layanan desain grafis untuk kebutuhan branding, media sosial, dan promosi bisnis."
+      }
+    }
+  },
+  "features": {
+    "badge": "Fitur",
+    "title": "Temukan fitur-fitur unggulan kami",
+    "description": "Astra menawarkan berbagai fitur untuk membantu Anda membangun website yang menakjubkan dalam waktu singkat",
+    "features_menu": {
+      "fast_setup": {
+        "title": "Pengaturan Cepat",
+        "info": "Buat website Anda berjalan dalam hitungan menit dengan pembangun berbasis AI yang intuitif."
+      },
+      "customizable_templates": {
+        "title": "Template yang Dapat Disesuaikan",
+        "info": "Pilih dari berbagai template menakjubkan dan sesuaikan dengan merek Anda."
+      },
+      "seo_optimized": {
+        "title": "Dioptimalkan untuk SEO",
+        "info": "Fitur SEO bawaan memastikan website Anda peringkat baik di mesin pencari."
+      },
+      "responsive_design": {
+        "title": "Desain Responsif",
+        "info": "Website Anda akan terlihat bagus di semua perangkat, dari desktop hingga ponsel."
+      },
+      "ecommerce_ready": {
+        "title": "Siap E-Commerce",
+        "info": "Mulai berjualan online dengan fitur dan integrasi e-commerce kami."
+      },
+      "secure_hosting": {
+        "title": "Hosting Aman",
+        "info": "Nikmati ketenangan dengan hosting yang aman dan andal untuk website Anda."
+      }
+    }
+  },
+  "pricing": {
+    "badge": "Harga",
+    "title": "Pilih paket yang tepat untuk bisnis Anda",
+    "description": "Pilih paket terbaik untuk bisnis Anda dan mulai bangun website impian Anda hari ini",
+    "pricing_menu": {
+      "starter": {
+        "title": "Pemula",
+        "description": "Sempurna untuk mencoba plura",
+        "price": "Gratis",
+        "duration": "",
+        "highlight": "Fitur utama",
+        "buttonText": "Mulai gratis",
+        "features": ["Proyek terbatas", "1 Anggota tim", "Fitur dasar"],
+        "priceId": ""
+      },
+      "unlimited": {
+        "title": "Saas Unlimited",
+        "description": "Paket agensi ultimate",
+        "price": "Rp2.999.000",
+        "duration": "bulan",
+        "highlight": "Fitur utama",
+        "buttonText": "Upgrade ke Pro",
+        "features": ["Proyek tak terbatas", "5 Anggota tim", "Alat desain lanjutan", "Domain yang dapat disesuaikan"],
+        "priceId": "price_1OYxkqFj9oKEERu1KfJGWxgN"
+      },
+      "enterprise": {
+        "title": "Enterprise",
+        "description": "Untuk pemilik agensi serius",
+        "price": "Rp5.999.000",
+        "duration": "bulan",
+        "highlight": "Semua di Starter, plus",
+        "buttonText": "Upgrade ke Enterprise",
+        "features": ["Proyek tak terbatas", "Anggota tim tak terbatas", "Branding kustom", "Dukungan prioritas (24/7)"],
+        "priceId": "price_1OYxkqFj9oKEERu1NbKUxXxN"
+      }
+    }
+  },
+  "testimonial": {
+    "badge": "Pelanggan Kami",
+    "title": "Apa kata mereka",
+    "description": "Lihat bagaimana Astra memberdayakan bisnis dari berbagai ukuran. Ini yang dikatakan orang-orang di Twitter",
+    "testimonial_people": {
+      "jack": {
+        "testimonial": "Saya belum pernah melihat yang seperti ini sebelumnya. Ini luar biasa. Saya suka."
+      },
+      "jill": {
+        "testimonial": "Saya tidak tahu harus berkata apa. Saya terkesima. Ini luar biasa."
+      },
+      "john": {
+        "testimonial": "Saya kehabisan kata-kata. Ini luar biasa. Saya suka."
+      },
+      "jane": {
+        "testimonial": "Saya belum pernah melihat yang seperti ini sebelumnya. Ini luar biasa. Saya suka."
+      },
+      "jenny": {
+        "testimonial": "Saya belum pernah melihat yang seperti ini sebelumnya. Ini luar biasa. Saya suka."
+      },
+      "james": {
+        "testimonial": "Saya belum pernah melihat yang seperti ini sebelumnya. Ini luar biasa. Saya suka."
+      }
+    }
+  },
+  "newsletter": {
+    "title": "Dari Ide ke Peluncuran <br /> Lebih Cepat dari Sebelumnya",
+    "description": "Bangun website menakjubkan dengan pembangun drag-and-drop intuitif Astra dan asisten AI yang canggih",
+    "get_started": "Mulai",
+    "join_title": "Bergabung dengan newsletter kami",
+    "join_description": "Tetap update dengan semua tentang pembangun AI",
+    "placeholder": "Masukkan email Anda",
+    "Subscribe": "Berlangganan",
+    "by": "Dengan berlangganan Anda menyetujui",
+    "police": "Kebijakan Privasi kami"
+  },
+  "contact": {
+    "badge": "Hubungi Kami",
+    "title": "Hubungi Kami",
+    "description": "Punya pertanyaan atau butuh bantuan? Kami siap membantu.",
+    "address": "Temukan kami",
+    "call": "Hubungi kami",
+    "mail": "Email kami",
+    "visit": "Kunjungi kami",
+    "day": "Senin - Minggu",
+    "subject_menu": {
+      "1": {
+        "subject": "Pengembangan Web"
+      },
+      "2": {
+        "subject": "Pengembangan Mobile"
+      },
+      "3": {
+        "subject": "Joki Tugas"
+      },
+      "4": {
+        "subject": "Proyek Fullstack"
+      },
+      "5": {
+        "subject": "Tambah Fitur"
+      },
+      "6": {
+        "subject": "Optimasi SEO"
+      }
+    }
+  },
+  "blog": {
+    "title": "Blog",
+    "description": "Semua blog dan berita terbaru, langsung dari tim."
+  },
+  "tags": {
+    "title": "Semua Tag"
+  },
+  "help": {
+    "title": "Bantuan",
+    "description": "Butuh bantuan? Kami siap membantu."
+  },
+  "change": {
+    "title": "Catatan Perubahan",
+    "description": "Tetap update dengan perubahan terbaru platform kami."
+  },
+  "enterprise": {
+    "title": "Perusahaan",
+    "description": "Hubungi kami untuk mempelajari lebih lanjut tentang solusi perusahaan kami."
+  },
+  "faq": {
+    "title": "Pertanyaan yang Sering Diajukan",
+    "description": "Berikut adalah beberapa pertanyaan umum yang sering kami terima. Jika Anda memiliki pertanyaan yang tidak terjawab di sini, jangan ragu untuk menghubungi kami.",
+    "faq_menu": {
+      "1": {
+        "question": "Apakah ini dapat diakses?",
+        "answered": "Ya. Ini mengikuti pola desain WAI-ARIA, memastikan aksesibilitas untuk semua pengguna."
+      },
+      "2": {
+        "question": "Apa saja fitur yang ditawarkan perangkat lunak ini?",
+        "answered": "Perangkat lunak manajemen tautan kami menawarkan fitur seperti pemendekan tautan, pelacakan klik, tautan bermerek yang dapat disesuaikan, dan saran berbasis AI."
+      },
+      "3": {
+        "question": "Bagaimana sistem harganya?",
+        "answered": "Kami menawarkan tiga paket: Gratis, Pro (Rp135.000/bulan), dan Bisnis (Rp735.000/bulan). Langganan tahunan mendapat diskon."
+      },
+      "4": {
+        "question": "Bisakah saya upgrade atau downgrade paket saya?",
+        "answered": "Ya! Anda dapat dengan mudah upgrade atau downgrade paket Anda kapan saja melalui pengaturan akun."
+      },
+      "5": {
+        "question": "Apakah tersedia dukungan pelanggan?",
+        "answered": "Tentu saja! Kami menyediakan dukungan komunitas untuk semua pengguna dan dukungan prioritas untuk pelanggan paket Pro dan Bisnis."
+      },
+      "6": {
+        "question": "Bisakah saya melacak klik tautan saya?",
+        "answered": "Ya, perangkat lunak kami memungkinkan Anda melacak klik pada tautan Anda, memberikan wawasan tentang keterlibatan pengguna dan demografis."
+      },
+      "7": {
+        "question": "Apakah tersedia aplikasi mobile?",
+        "answered": "Saat ini, kami tidak memiliki aplikasi mobile khusus, tetapi aplikasi web kami sepenuhnya responsif dan berfungsi dengan baik di perangkat mobile."
+      },
+      "8": {
+        "question": "Metode pembayaran apa yang Anda terima?",
+        "answered": "Kami menerima berbagai metode pembayaran termasuk kartu kredit, PayPal, dan opsi pembayaran aman lainnya."
+      }
+    }
+  },
+  "common": {
+    "welcome": "Selamat Datang"
+  },
+  "about": {
+    "title": "Tentang CVCoders",
+    "description": "Kami adalah tim pengembang yang berdedikasi untuk menciptakan pengalaman digital yang luar biasa dan berbagi pengetahuan dengan komunitas.",
+    "team_image_alt": "Tim CVCoders",
+    "meta" : {
+      "title" : "About"
+    },
+    "story": {
+      "title": "Cerita Kami",
+      "paragraph1": "Didirikan pada tahun 2023, CVCoders dimulai dengan misi sederhana: membuat pengembangan web dapat diakses oleh semua orang sambil menyediakan solusi berkualitas tinggi untuk bisnis.",
+      "paragraph2": "Kami percaya pada kekuatan teknologi untuk mengubah bisnis dan meningkatkan kehidupan. Tim kami menggabungkan keahlian teknis dengan pemikiran kreatif untuk memberikan hasil yang luar biasa.",
+      "paragraph3": "Hari ini, kami bangga melayani klien di seluruh dunia dan mempertahankan komunitas pengembang yang terus berkembang yang belajar dan tumbuh bersama."
+    },
+    "stats": {
+      "youtube": {
+        "title": "Subscriber YouTube",
+        "description": "Komunitas penonton yang berkembang"
+      },
+      "facebook": {
+        "title": "Pengikut Facebook",
+        "description": "Keterlibatan media sosial"
+      },
+      "instagram": {
+        "title": "Pengikut Instagram",
+        "description": "Pengikut konten visual"
+      },
+      "blogs": {
+        "title": "Artikel Blog",
+        "description": "Artikel berbagi pengetahuan"
+      },
+      "tags": {
+        "title": "Total Tag",
+        "description": "Kategori konten"
+      },
+      "products": {
+        "title": "Produk",
+        "description": "Solusi digital tersedia"
+      }
+    },
+    "youtube_card": {
+      "title": "Bergabung dengan Komunitas YouTube Kami",
+      "description": "Berlangganan channel kami untuk tutorial, tips, dan wawasan teknologi",
+      "cta": "Berlangganan Sekarang"
+    },
+    "social": {
+      "facebook": "Ikuti di Facebook",
+      "instagram": "Ikuti di Instagram",
+      "youtube": "Berlangganan di YouTube"
+    }
+  }
+} 
