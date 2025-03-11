@@ -8,17 +8,12 @@ const CbzExtractor = () => {
   const [extracting, setExtracting] = useState(false);
   const [progress, setProgress] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const [isFolderUpload, setIsFolderUpload] = useState(true); // Tambahkan toggle untuk folder/file
 
   useEffect(() => {
     if (fileInputRef.current) {
-      if (isFolderUpload) {
-        fileInputRef.current.setAttribute("webkitdirectory", ""); // Aktifkan folder upload
-      } else {
-        fileInputRef.current.removeAttribute("webkitdirectory"); // Nonaktifkan folder upload
-      }
+      fileInputRef.current.setAttribute("webkitdirectory", ""); // Aktifkan folder upload otomatis
     }
-  }, [isFolderUpload]);
+  }, []);
 
   const extractCbzFile = async (file: File) => {
     try {
@@ -81,28 +76,7 @@ const CbzExtractor = () => {
 
   return (
     <div className="p-4">
-      <h2 className="text-xl font-bold mb-4">CBZ Folder & File Extractor</h2>
-
-      {/* Tombol toggle antara upload folder & file */}
-      <div className="mb-2">
-        <label className="mr-2">Upload sebagai:</label>
-        <button
-          className={`px-3 py-1 rounded ${
-            isFolderUpload ? "bg-blue-600 text-white" : "bg-gray-300"
-          }`}
-          onClick={() => setIsFolderUpload(true)}
-        >
-          Folder
-        </button>
-        <button
-          className={`ml-2 px-3 py-1 rounded ${
-            !isFolderUpload ? "bg-blue-600 text-white" : "bg-gray-300"
-          }`}
-          onClick={() => setIsFolderUpload(false)}
-        >
-          File
-        </button>
-      </div>
+      <h2 className="text-xl font-bold mb-4">CBZ Extractor (File & Folder)</h2>
 
       <input
         ref={fileInputRef}
