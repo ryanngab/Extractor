@@ -278,7 +278,7 @@ const CbzExtractor = () => {
 
   return (
     <div
-      className="w-full h-full border-2 border-dashed border-gray-400 p-6 mt-4 text-center cursor-pointer bg-gray-100 rounded-lg transition-colors duration-200 hover:border-blue-500 hover:bg-blue-50 *:"
+      className="fixed inset-0 w-screen h-screen border-2 border-dashed border-gray-400 p-6 text-center cursor-pointer bg-gray-100 rounded-lg transition-colors duration-200 hover:border-blue-500 hover:bg-blue-50"
       ref={dropRef}
       onDragOver={(e) => {
         e.preventDefault();
