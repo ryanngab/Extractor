@@ -8,12 +8,18 @@ import { Progress } from "@/components/ui/progress";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 
+// Tambahkan interface untuk memperluas HTMLInputElement
+interface CustomInputElement extends HTMLInputElement {
+  webkitdirectory: boolean;
+  directory: boolean;
+}
+
 const CbzExtractor = () => {
   const [extracting, setExtracting] = useState(false);
   const [progress, setProgress] = useState(0);
   const [filesList, setFilesList] = useState<string[]>([]);
   const [completed, setCompleted] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const fileInputRef = useRef<CustomInputElement | null>(null);
   const dropRef = useRef<HTMLDivElement | null>(null);
   const [extractedFiles, setExtractedFiles] = useState<
     Array<{
@@ -26,7 +32,8 @@ const CbzExtractor = () => {
 
   useEffect(() => {
     if (fileInputRef.current) {
-      fileInputRef.current.removeAttribute("webkitdirectory"); // Default tidak menggunakan webkitdirectory
+      fileInputRef.current.webkitdirectory = true;
+      fileInputRef.current.directory = true;
     }
   }, []);
 
@@ -174,14 +181,12 @@ const CbzExtractor = () => {
       <CardContent>
         {/* Input File */}
         <Input
-          ref={fileInputRef}
+          ref={fileInputRef as any}
           type="file"
           multiple
           accept=".cbz"
           onChange={handleFileUpload}
           disabled={extracting}
-          webkitdirectory="" // Tambahkan atribut ini untuk mendukung pemilihan folder
-          directory="" // Untuk browser non-webkit
         />
 
         {/* Drag & Drop Area */}
