@@ -1,6 +1,6 @@
 import AnimationContainer from "@/components/global/animation-container";
 import React from "react";
-import CbzExtractor from "../../../../components/CbzExtractor";
+// import CbzExtractor from "../../../../components/CbzExtractor";
 import CbzExtractors from "../../../../components/CbzExtractor-1";
 const ChangeLogPage = () => {
   return (
@@ -12,8 +12,8 @@ const ChangeLogPage = () => {
         <p className="text-base md:text-lg mt-6 text-center text-muted-foreground">
           Stay up to date with the latest changes to our platform.
         </p>
-        <CbzExtractor />
-        {/* <CbzExtractors /> */}
+        {/* <CbzExtractor /> */}
+        <CbzExtractors />
       </AnimationContainer>
     </div>
   );
