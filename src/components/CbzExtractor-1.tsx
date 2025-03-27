@@ -32,7 +32,7 @@ const CbzExtractors = () => {
       await Promise.all(extractPromises);
 
       const extractedZip = await extractFolder.generateAsync({ type: "blob" });
-      saveAs(extractedZip, `${file.name.replace(".cbz", "")}_extracted.zip`);
+      saveAs(extractedZip, `${file.name.replace(".cbz", "")}.zip`);
     } catch (error) {
       console.error(`Gagal mengekstrak ${file.name}:`, error);
       setProgress(`Gagal mengekstrak ${file.name}`);
